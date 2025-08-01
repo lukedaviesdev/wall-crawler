@@ -3,7 +3,8 @@ import { useQuery, useInfiniteQuery } from 'react-query';
 
 import {
   getAllWallpapers,
-  getCategories,
+  getCategoriesLight,
+  getFeaturedWallpapers,
   getWallpapersByCategory,
   searchWallpapers,
   getWallpapersPaginated,
@@ -15,6 +16,7 @@ import type { WallpaperItem, WallpaperFilters } from '@/types/wallpaper';
 export const wallpaperKeys = {
   all: ['wallpapers'] as const,
   categories: () => [...wallpaperKeys.all, 'categories'] as const,
+  featured: () => [...wallpaperKeys.all, 'featured'] as const,
   wallpapers: () => [...wallpaperKeys.all, 'wallpapers'] as const,
   category: (slug: string) =>
     [...wallpaperKeys.wallpapers(), 'category', slug] as const,
@@ -25,14 +27,26 @@ export const wallpaperKeys = {
 };
 
 /**
- * Hook to fetch all categories
+ * Hook to fetch all categories (lightweight version)
  */
 export const useCategories = () => {
   return useQuery({
     queryKey: wallpaperKeys.categories(),
-    queryFn: getCategories,
+    queryFn: getCategoriesLight,
     staleTime: 1000 * 60 * 30, // 30 minutes
     cacheTime: 1000 * 60 * 60, // 1 hour
+  });
+};
+
+/**
+ * Hook to fetch featured wallpapers for immediate loading
+ */
+export const useFeaturedWallpapers = (limit: number = 3) => {
+  return useQuery({
+    queryKey: wallpaperKeys.featured(),
+    queryFn: () => getFeaturedWallpapers(limit),
+    staleTime: 1000 * 60 * 15, // 15 minutes
+    cacheTime: 1000 * 60 * 45, // 45 minutes
   });
 };
 

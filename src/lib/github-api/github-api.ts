@@ -88,35 +88,12 @@ const getAspectRatio = (
 };
 
 /**
- * Fetch directory contents from GitHub API
+ * Fetch directory contents from GitHub API (with rate limiting)
  */
 const fetchDirectoryContents = async (
   path: string = '',
 ): Promise<GitHubDirectoryResponse> => {
-  const url = buildApiUrl(path);
-
-  try {
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new GitHubApiError(
-        `Failed to fetch ${path || 'root'}: ${response.statusText}`,
-        response.status,
-        url,
-      );
-    }
-
-    return await response.json();
-  } catch (error) {
-    if (error instanceof GitHubApiError) {
-      throw error;
-    }
-    throw new GitHubApiError(
-      `Network error fetching ${path || 'root'}: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      0,
-      url,
-    );
-  }
+  return fetchDirectoryContentsWithRateLimit(path);
 };
 
 /**
@@ -125,15 +102,49 @@ const fetchDirectoryContents = async (
 export const getCategories = async (): Promise<WallpaperCategory[]> => {
   const contents = await fetchDirectoryContents();
 
-  const categories = contents
+  // Filter out system directories and non-wallpaper folders
+  const wallpaperDirectories = contents
     .filter((item) => item.type === 'dir')
-    .map((item) => ({
-      name: item.name,
-      slug: item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-      path: item.path,
-      count: 0, // Will be populated separately if needed
-      description: `${item.name} wallpapers`,
-    }));
+    .filter((item) => !item.name.startsWith('.')) // Filter out .github, etc.
+    .filter(
+      (item) =>
+        !['logs.txt', 'responses.txt', 'snake_case_log.txt'].includes(
+          item.name,
+        ),
+    );
+
+  const categories: WallpaperCategory[] = [];
+
+  for (const item of wallpaperDirectories) {
+    try {
+      // Count wallpapers in this category
+      const categoryContents = await fetchDirectoryContents(`/${item.path}`);
+      const wallpaperCount = categoryContents.filter(
+        (file) => file.type === 'file' && isImageFile(file.name),
+      ).length;
+
+      categories.push({
+        name: item.name,
+        slug: item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        path: item.path,
+        count: wallpaperCount,
+        description: `${item.name} wallpapers`,
+      });
+    } catch (error) {
+      console.warn(
+        `Failed to count wallpapers in category ${item.name}:`,
+        error,
+      );
+      // Still add the category but with 0 count
+      categories.push({
+        name: item.name,
+        slug: item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        path: item.path,
+        count: 0,
+        description: `${item.name} wallpapers`,
+      });
+    }
+  }
 
   return categories;
 };
@@ -235,4 +246,189 @@ export const getWallpapersPaginated = async (
     hasMore,
     total: allWallpapers.length,
   };
+};
+
+/**
+ * Get all available categories from the repository (lightweight version without counts)
+ */
+export const getCategoriesLight = async (): Promise<WallpaperCategory[]> => {
+  const contents = await fetchDirectoryContents();
+
+  // Filter out system directories and non-wallpaper folders
+  const wallpaperDirectories = contents
+    .filter((item) => item.type === 'dir')
+    .filter((item) => !item.name.startsWith('.')) // Filter out .github, etc.
+    .filter(
+      (item) =>
+        !['logs.txt', 'responses.txt', 'snake_case_log.txt'].includes(
+          item.name,
+        ),
+    );
+
+  const categories: WallpaperCategory[] = wallpaperDirectories.map((item) => ({
+    name: item.name,
+    slug: item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    path: item.path,
+    count: 0, // Will be populated on-demand
+    description: `${item.name} wallpapers`,
+  }));
+
+  return categories;
+};
+
+// Rate limiting configuration
+const RATE_LIMIT_CONFIG = {
+  maxRequestsPerMinute: 50, // Conservative limit
+  requestDelay: 1200, // 1.2 seconds between requests
+  retryAttempts: 3,
+  retryDelay: 5000, // 5 seconds
+} as const;
+
+// Request queue to manage rate limiting
+class RequestQueue {
+  private queue: Array<() => Promise<any>> = [];
+  private processing = false;
+  private lastRequestTime = 0;
+
+  async add<T>(request: () => Promise<T>): Promise<T> {
+    return new Promise((resolve, reject) => {
+      this.queue.push(async () => {
+        try {
+          const result = await request();
+          resolve(result);
+        } catch (error) {
+          reject(error);
+        }
+      });
+      this.processQueue();
+    });
+  }
+
+  private async processQueue() {
+    if (this.processing || this.queue.length === 0) return;
+
+    this.processing = true;
+
+    while (this.queue.length > 0) {
+      const now = Date.now();
+      const timeSinceLastRequest = now - this.lastRequestTime;
+
+      if (timeSinceLastRequest < RATE_LIMIT_CONFIG.requestDelay) {
+        await this.delay(RATE_LIMIT_CONFIG.requestDelay - timeSinceLastRequest);
+      }
+
+      const request = this.queue.shift();
+      if (request) {
+        this.lastRequestTime = Date.now();
+        await request();
+      }
+    }
+
+    this.processing = false;
+  }
+
+  private delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+}
+
+const requestQueue = new RequestQueue();
+
+// Featured categories for immediate loading
+const FEATURED_CATEGORIES = [
+  'anime',
+  'abstract',
+  'nature',
+  'architecture',
+  'digital',
+  'minimal',
+] as const;
+
+/**
+ * Enhanced fetch with rate limiting and retry logic
+ */
+const fetchWithRateLimit = async (
+  url: string,
+  retryCount = 0,
+): Promise<Response> => {
+  try {
+    const response = await fetch(url);
+
+    if (response.status === 429) {
+      // Rate limited
+      if (retryCount < RATE_LIMIT_CONFIG.retryAttempts) {
+        console.warn(
+          `Rate limited, retrying in ${RATE_LIMIT_CONFIG.retryDelay}ms (attempt ${retryCount + 1})`,
+        );
+        await new Promise((resolve) =>
+          setTimeout(resolve, RATE_LIMIT_CONFIG.retryDelay),
+        );
+        return fetchWithRateLimit(url, retryCount + 1);
+      }
+      throw new GitHubApiError('Rate limit exceeded after retries', 429, url);
+    }
+
+    if (!response.ok) {
+      throw new GitHubApiError(
+        `Failed to fetch ${url}: ${response.statusText}`,
+        response.status,
+        url,
+      );
+    }
+
+    return response;
+  } catch (error) {
+    if (error instanceof GitHubApiError) throw error;
+    throw new GitHubApiError(`Network error fetching ${url}`, 0, url);
+  }
+};
+
+/**
+ * Enhanced directory contents fetcher with rate limiting
+ */
+const fetchDirectoryContentsWithRateLimit = async (
+  path: string = '',
+): Promise<GitHubDirectoryResponse> => {
+  const url = buildApiUrl(path);
+
+  return requestQueue.add(async () => {
+    const response = await fetchWithRateLimit(url);
+    return response.json();
+  });
+};
+
+/**
+ * Get featured wallpapers from select categories (limited per category)
+ */
+export const getFeaturedWallpapers = async (
+  limit: number = 3,
+): Promise<WallpaperItem[]> => {
+  const featuredWallpapers: WallpaperItem[] = [];
+
+  for (const categoryName of FEATURED_CATEGORIES) {
+    try {
+      console.log(`Loading featured wallpapers from ${categoryName}...`);
+      const contents = await fetchDirectoryContentsWithRateLimit(
+        `/${categoryName}`,
+      );
+
+      const categoryWallpapers = contents
+        .filter((item) => item.type === 'file' && isImageFile(item.name))
+        .slice(0, limit) // Limit per category
+        .map((item) => extractFileInfo(item, categoryName));
+
+      featuredWallpapers.push(...categoryWallpapers);
+
+      // Add small delay between categories
+      await new Promise((resolve) => setTimeout(resolve, 300));
+    } catch (error) {
+      console.warn(
+        `Failed to load featured wallpapers from ${categoryName}:`,
+        error,
+      );
+      // Continue with other categories
+    }
+  }
+
+  return featuredWallpapers;
 };

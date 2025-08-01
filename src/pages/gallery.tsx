@@ -2,54 +2,35 @@ import React from 'react';
 
 import { WallpaperGrid, WallpaperCard } from '@/components/wallpaper-grid';
 import { useDownloads } from '@/hooks/use-downloads';
+import {
+  useCategories,
+  useFeaturedWallpapers,
+  useWallpapersByCategory,
+} from '@/hooks/use-wallpapers';
 
 import type { WallpaperItem } from '@/types/wallpaper';
 
-// Example wallpaper data for testing
-const exampleWallpapers: WallpaperItem[] = [
-  {
-    id: '1',
-    name: 'mountain-landscape-4k.jpg',
-    path: 'landscapes/mountain-landscape-4k.jpg',
-    sha: 'abc123',
-    size: 2048000, // 2MB
-    download_url:
-      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500',
-    html_url: 'https://github.com/example/repo',
-    category: 'Landscapes',
-    resolution: { width: 3840, height: 2160 },
-    aspectRatio: 'landscape',
-  },
-  {
-    id: '2',
-    name: 'abstract-art-portrait.png',
-    path: 'abstract/abstract-art-portrait.png',
-    sha: 'def456',
-    size: 1536000, // 1.5MB
-    download_url:
-      'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=500',
-    html_url: 'https://github.com/example/repo',
-    category: 'Abstract',
-    resolution: { width: 1080, height: 1920 },
-    aspectRatio: 'portrait',
-  },
-  {
-    id: '3',
-    name: 'cyberpunk-city.jpg',
-    path: 'cyberpunk/cyberpunk-city.jpg',
-    sha: 'ghi789',
-    size: 3072000, // 3MB
-    download_url:
-      'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=500',
-    html_url: 'https://github.com/example/repo',
-    category: 'Cyberpunk',
-    resolution: { width: 2560, height: 1440 },
-    aspectRatio: 'landscape',
-  },
-];
-
 export const GalleryPage: React.FC = () => {
   const downloads = useDownloads();
+
+  // Fetch featured wallpapers immediately for better UX
+  const featuredQuery = useFeaturedWallpapers(3);
+
+  // Fetch categories (lightweight)
+  const categoriesQuery = useCategories();
+
+  // For demo: also fetch wallpapers from first category
+  const firstCategory = categoriesQuery.data?.[0];
+  const wallpapersQuery = useWallpapersByCategory(
+    firstCategory?.slug || '',
+    !!firstCategory,
+  );
+
+  // Use featured wallpapers if available, otherwise use category wallpapers
+  const wallpapers = featuredQuery.data || wallpapersQuery.data || [];
+  const isLoading =
+    featuredQuery.isLoading ||
+    (!featuredQuery.data && wallpapersQuery.isLoading);
 
   const handleDownload = (wallpaper: WallpaperItem) => {
     downloads.startDownload(wallpaper);
@@ -59,6 +40,34 @@ export const GalleryPage: React.FC = () => {
     // TODO: Implement preview modal
     console.log('Preview wallpaper:', wallpaper.name);
   };
+
+  // Loading state
+  if (isLoading && !wallpapers.length) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-neon mx-auto mb-4"></div>
+          <p className="text-lg text-muted-foreground">
+            Loading featured wallpapers...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (categoriesQuery.error) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-xl text-red-400 mb-2">Failed to load categories</p>
+          <p className="text-muted-foreground">Please try again later</p>
+        </div>
+      </div>
+    );
+  }
+
+  const totalCategories = categoriesQuery.data?.length || 0;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -71,7 +80,8 @@ export const GalleryPage: React.FC = () => {
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Discover and download stunning wallpapers from the dharmx/walls
-              collection. High-quality images across 40+ categories.
+              collection. High-quality images across {totalCategories}{' '}
+              categories.
             </p>
           </div>
         </div>
@@ -81,7 +91,13 @@ export const GalleryPage: React.FC = () => {
       <div className="border-b bg-muted/20">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <span>Showing {exampleWallpapers.length} wallpapers</span>
+            <span>
+              {isLoading && !wallpapers.length
+                ? 'Loading wallpapers...'
+                : featuredQuery.data
+                  ? `Showing ${wallpapers.length} featured wallpapers from popular categories`
+                  : `Showing ${wallpapers.length} wallpapers from "${firstCategory?.name || 'Unknown'}" category`}
+            </span>
             <span>Downloaded: {downloads.totalDownloaded}</span>
           </div>
         </div>
@@ -89,21 +105,36 @@ export const GalleryPage: React.FC = () => {
 
       {/* Gallery */}
       <main className="container mx-auto py-8">
-        <WallpaperGrid layout="auto" spacing="md">
-          {exampleWallpapers.map((wallpaper) => (
-            <WallpaperCard
-              key={wallpaper.id}
-              wallpaper={wallpaper}
-              downloadStatus={downloads.getDownloadStatus(wallpaper.id)}
-              downloadProgress={downloads.downloadProgress(wallpaper.id)}
-              onDownload={handleDownload}
-              onPause={downloads.pauseDownload}
-              onCancel={downloads.cancelDownload}
-              onPreview={handlePreview}
-              size="md"
-            />
-          ))}
-        </WallpaperGrid>
+        {isLoading && !wallpapers.length ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neon mx-auto mb-4"></div>
+            <p className="text-muted-foreground">
+              Loading{' '}
+              {featuredQuery.isLoading ? 'featured' : firstCategory?.name}{' '}
+              wallpapers...
+            </p>
+          </div>
+        ) : wallpapers.length > 0 ? (
+          <WallpaperGrid layout="auto" spacing="md">
+            {wallpapers.map((wallpaper) => (
+              <WallpaperCard
+                key={wallpaper.id}
+                wallpaper={wallpaper}
+                downloadStatus={downloads.getDownloadStatus(wallpaper.id)}
+                downloadProgress={downloads.downloadProgress(wallpaper.id)}
+                onDownload={handleDownload}
+                onPause={downloads.pauseDownload}
+                onCancel={downloads.cancelDownload}
+                onPreview={handlePreview}
+                size="md"
+              />
+            ))}
+          </WallpaperGrid>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-lg text-muted-foreground">No wallpapers found</p>
+          </div>
+        )}
       </main>
     </div>
   );
