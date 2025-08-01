@@ -1,0 +1,7 @@
+import { createFileRoute } from '@tanstack/react-router';
+
+import { {{pascalCase name}}Page } from '@/pages/{{kebabCase name}}';
+
+export const Route = createFileRoute('/{{kebabCase name}}')({
+  component: {{pascalCase name}}Page,
+});

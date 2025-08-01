@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: |
+        # Clean install without scripts
+        npm ci --ignore-scripts
+        # Install platform-specific dependencies
+        npm i @rollup/rollup-linux-x64-gnu
+        # Run prepare scripts after all dependencies are properly installed
+        npm rebuild
+        npm run prepare --if-present
+
+    - name: Check formatting
+      run: npm run format:check
+
+    - name: Lint
+      run: npm run lint
+
+    - name: Type check
+      run: npm run type-check
+
+    # - name: Run tests
+    #   run: npm run test:ci
+    #   env:
+    #     NODE_ENV: test
+    #     # Improve Vitest performance in CI
+    #     VITEST_MAX_THREADS: 2
+    #     VITEST_MIN_THREADS: 1
+    #     # Fail if a test takes too long (default is 5000ms)
+    #     VITEST_TEST_TIMEOUT: 10000
+    #     # Add debug logging
+    #     DEBUG: "vitest:*"
+    #     # Ensure proper test environment
+    #     JSDOM: true
+    #     VITEST_DOM_ENV: "happy-dom"

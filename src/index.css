@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@custom-variant dark (&:where(.dark, .dark *));
+@layer base {
+  :root {
+    /* Cyber Gallery Light Theme (fallback) */
+    --background: 249 37% 96%;
+    --foreground: 249 37% 16%;
+    --card: 245 18% 92%;
+    --card-foreground: 249 37% 16%;
+    --popover: 249 37% 96%;
+    --popover-foreground: 249 37% 16%;
+    --primary: 190 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 245 18% 36%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 245 18% 85%;
+    --muted-foreground: 249 37% 35%;
+    --accent: 352 86% 59%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 245 18% 50%;
+    --input: 245 18% 18%;
+    --ring: 190 100% 50%;
+    --radius: 0.5rem;
+
+    /* Custom Cyber Gallery Properties */
+    --primary-dark: 249 37% 16%;
+    --primary-mid: 245 18% 36%;
+    --primary-light: 266 15% 55%;
+    --accent-neon: 190 100% 50%;
+    --accent-warm: 352 86% 59%;
+
+    /* Glass Effect Properties */
+    --glass-overlay: 0 0% 100% / 0.05;
+    --glass-border: 0 0% 100% / 0.1;
+    --glass-strong: 0 0% 100% / 0.08;
+
+    /* Additional UI Colors */
+    --success: 142 76% 36%;
+    --warning: 38 92% 50%;
+    --info: 210 98% 78%;
+  }
+
+  .dark {
+    /* Cyber Gallery Dark Theme */
+    --background: 249 37% 6%;
+    --foreground: 0 0% 98%;
+    --card: 249 37% 8%;
+    --card-foreground: 0 0% 95%;
+    --popover: 249 37% 6%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 190 100% 50%;
+    --primary-foreground: 249 37% 6%;
+    --secondary: 245 18% 12%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 245 18% 15%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 352 86% 59%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 245 18% 18%;
+    --input: 245 18% 12%;
+    --ring: 190 100% 50%;
+    --radius: 0.5rem;
+
+    /* Custom Cyber Gallery Properties - Dark */
+    --primary-dark: 249 37% 16%;
+    --primary-mid: 245 18% 36%;
+    --primary-light: 266 15% 55%;
+    --accent-neon: 190 100% 50%;
+    --accent-warm: 352 86% 59%;
+
+    /* Glass Effect Properties - Dark */
+    --glass-overlay: 0 0% 100% / 0.05;
+    --glass-border: 0 0% 100% / 0.1;
+    --glass-strong: 0 0% 100% / 0.12;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+  }
+}
+
+/* Custom Utility Classes for Glass Effects */
+@layer utilities {
+  .glass {
+    @apply backdrop-blur-xl bg-white/[0.05] border border-white/[0.1];
+  }
+
+  .glass-strong {
+    @apply backdrop-blur-2xl bg-white/[0.08] border border-white/[0.15];
+  }
+
+  .glow-neon {
+    box-shadow: 0 0 20px hsl(var(--accent-neon) / 0.3);
+  }
+
+  .glow-warm {
+    box-shadow: 0 0 20px hsl(var(--accent-warm) / 0.3);
+  }
+
+  .text-neon {
+    @apply text-[hsl(var(--accent-neon))];
+  }
+
+  .text-warm {
+    @apply text-[hsl(var(--accent-warm))];
+  }
+}
