@@ -1,0 +1,118 @@
+---
+globs: src/hooks/*
+alwaysApply: false
+---
+# Hook Generation Rules
+
+## General Hook Guidelines
+
+### Folder Structure
+- Each hook should be in its own folder under `src/hooks/`
+- Folder name should match the hook name (e.g., `use-wallpapers/`)
+- Main hook file: `use-{name}.ts`
+- Test file: `use-{name}.test.ts` (when needed)
+- Index file: `index.ts` for barrel exports
+- Utilities: Any hook-specific utilities as separate files
+
+### Import Standards
+- **ALWAYS use @ or ~ imports, NEVER relative imports**
+- Correct: `import { type } from '@/types/wallpaper'`
+- Incorrect: `import { type } from '../../types/wallpaper'`
+- External packages can use direct imports
+
+### TypeScript Standards
+- Always include proper TypeScript types
+- Export hook options as interfaces when complex
+- Use generics when the hook is reusable with different types
+- Include JSDoc comments for all public functions
+
+### React Query Integration
+- Use React Query for server state management
+- Create query keys objects for consistent caching
+- Include proper error handling and loading states
+- Support infinite queries when appropriate
+
+### Testing (when implemented)
+- Each hook should have comprehensive tests
+- Mock external dependencies
+- Test both success and error scenarios
+- Use React Testing Library for hook testing
+
+### Performance
+- Use useMemo and useCallback when appropriate
+- Avoid unnecessary re-renders
+- Consider cleanup in useEffect hooks
+- Implement proper dependency arrays
+
+## Example Structure
+```
+src/hooks/use-example/
+├── index.ts              # Barrel export
+├── use-example.ts        # Main hook
+├── use-example.test.ts   # Tests (when needed)
+└── utils.ts              # Hook-specific utilities
+```
+
+## Export Pattern
+All hooks must be exported from the main hooks index:
+```typescript
+// src/hooks/index.ts
+export * from './use-example';
+```
+# Hook Generation Rules
+
+## General Hook Guidelines
+
+### Folder Structure
+- Each hook should be in its own folder under `src/hooks/`
+- Folder name should match the hook name (e.g., `use-wallpapers/`)
+- Main hook file: `use-{name}.ts`
+- Test file: `use-{name}.test.ts` (when needed)
+- Index file: `index.ts` for barrel exports
+- Utilities: Any hook-specific utilities as separate files
+
+### Import Standards
+- **ALWAYS use @ or ~ imports, NEVER relative imports**
+- Correct: `import { type } from '@/types/wallpaper'`
+- Incorrect: `import { type } from '../../types/wallpaper'`
+- External packages can use direct imports
+
+### TypeScript Standards
+- Always include proper TypeScript types
+- Export hook options as interfaces when complex
+- Use generics when the hook is reusable with different types
+- Include JSDoc comments for all public functions
+
+### React Query Integration
+- Use React Query for server state management
+- Create query keys objects for consistent caching
+- Include proper error handling and loading states
+- Support infinite queries when appropriate
+
+### Testing (when implemented)
+- Each hook should have comprehensive tests
+- Mock external dependencies
+- Test both success and error scenarios
+- Use React Testing Library for hook testing
+
+### Performance
+- Use useMemo and useCallback when appropriate
+- Avoid unnecessary re-renders
+- Consider cleanup in useEffect hooks
+- Implement proper dependency arrays
+
+## Example Structure
+```
+src/hooks/use-example/
+├── index.ts              # Barrel export
+├── use-example.ts        # Main hook
+├── use-example.test.ts   # Tests (when needed)
+└── utils.ts              # Hook-specific utilities
+```
+
+## Export Pattern
+All hooks must be exported from the main hooks index:
+```typescript
+// src/hooks/index.ts
+export * from './use-example';
+```

@@ -1,0 +1,69 @@
+# API Integration Rules
+
+## General API Guidelines
+
+### Folder Structure
+- Each API client should be in its own folder under `src/lib/`
+- Folder name should match the API service (e.g., `github-api/`)
+- Main API file: `{service}-api.ts` or `{service}.ts`
+- Utilities: API-specific utilities as separate files
+- Index file: `index.ts` for barrel exports
+
+### Import Standards
+- **ALWAYS use @ or ~ imports for internal modules**
+- Correct: `import type { WallpaperItem } from '@/types/wallpaper'`
+- Incorrect: `import type { WallpaperItem } from '../types/wallpaper'`
+- External packages use direct imports
+
+### Structure & Organization
+- Use functional approach over class-based patterns
+- One folder per external service/API
+- Clear separation of concerns
+- Logical grouping of related functions
+
+### Error Handling
+- Create custom error classes when needed
+- Use descriptive error messages
+- Include relevant context (status codes, URLs)
+- Handle rate limiting appropriately
+
+### TypeScript Integration
+- Define complete type interfaces for API responses
+- Use proper generics for reusable functions
+- Export types that other modules might need
+- Include JSDoc comments for public functions
+
+### Functional Patterns
+- Prefer pure functions over classes
+- Use composition over inheritance
+- Make functions easily testable
+- Keep side effects explicit
+
+### React Query Integration
+- Design APIs to work well with React Query
+- Support pagination and infinite scroll
+- Include proper cache invalidation patterns
+- Handle loading and error states
+
+### Performance Considerations
+- Implement request caching when appropriate
+- Use proper data transformation
+- Minimize API calls through batching
+- Handle rate limits gracefully
+
+## Example Structure
+```
+src/lib/github-api/
+├── index.ts              # Barrel export
+├── github-api.ts         # Main API functions
+├── utils.ts              # API-specific utilities
+└── constants.ts          # API constants
+```
+
+## Export Pattern
+All APIs must be exported from their folder index:
+```typescript
+// src/lib/github-api/index.ts
+export * from './github-api';
+export { GitHubApiError } from './github-api';
+```

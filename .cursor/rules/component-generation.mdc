@@ -1,0 +1,924 @@
+---
+globs: src/components/*/*.tsx
+alwaysApply: false
+---
+# Component Generation Rules
+
+## General Component Guidelines
+
+### ShadCN Integration (CRITICAL)
+- **ALWAYS use ShadCN CLI first**: `npx shadcn@latest add [component-name]`
+- **Never manually create** components that exist in ShadCN registry
+- **Copy & Own Approach**: Improve/extend existing ShadCN components rather than replacing
+- **Check Registry**: Before creating, verify component doesn't exist at https://ui.shadcn.com/docs/components
+
+### Folder Structure & Component Organization
+
+#### **Simple Components** (< 100 lines)
+- Single file in appropriate category folder
+- Example: `src/components/ui/badge.tsx`
+
+#### **Complex Components** (> 100 lines or multiple concerns)
+- **Own folder**: Following API/hooks pattern
+- **Folder structure**:
+```
+src/components/component-name/
+├── index.ts                    # Barrel export
+├── component-name.tsx          # Main orchestrator
+├── types.local.ts              # Local type definitions
+├── sub-component.local.tsx     # Sub-components with .local.tsx suffix
+├── another-sub.local.tsx       # Additional sub-components
+└── utils.local.ts              # Component-specific utilities (if needed)
+```
+
+#### **Component Decomposition Guidelines**
+- **Break components when**:
+  - Main component > 200 lines
+  - Multiple distinct UI concerns (e.g., image handling + progress + actions)
+  - Reusable sub-functionality within the component
+  - Complex state management that can be isolated
+
+- **Sub-component criteria**:
+  - Single responsibility principle
+  - 20-100 lines per sub-component
+  - Clear, focused interface
+  - Independent testability
+
+### Sub-Component Patterns
+
+#### **Naming Conventions**
+- **Main component**: `ComponentName.tsx`
+- **Sub-components**: `sub-component-name.local.tsx`
+- **Types**: `types.local.ts`
+- **Utils**: `utils.local.ts`
+- **Tests**: `component-name.test.tsx`
+
+#### **Local Sub-Component Structure**
+```typescript
+// image-container.local.tsx
+import React from 'react';
+import { cn } from '@/lib/utils';
+import type { ImageContainerProperties } from './types.local';
+
+export const ImageContainer: React.FC<ImageContainerProperties> = ({
+  // props
+}) => {
+  // Single-purpose component logic
+  return (
+    <div className="focused-responsibility">
+      {/* Specific UI concern */}
+    </div>
+  );
+};
+```
+
+#### **Main Component as Orchestrator**
+```typescript
+// main-component.tsx
+import React, { useState, useCallback } from 'react';
+import { SubComponentA } from './sub-component-a.local';
+import { SubComponentB } from './sub-component-b.local';
+import type { MainComponentProps } from './types.local';
+
+export const MainComponent = React.memo<MainComponentProps>(({
+  // Main props
+}) => {
+  // Orchestration logic only
+  const [sharedState, setSharedState] = useState();
+
+  const handleSharedAction = useCallback(() => {
+    // Coordinate between sub-components
+  }, []);
+
+  return (
+    <div className="main-container">
+      <SubComponentA
+        onAction={handleSharedAction}
+        // Pass relevant props
+      />
+      <SubComponentB
+        state={sharedState}
+        // Pass relevant props
+      />
+    </div>
+  );
+});
+```
+
+### Local Types Organization
+
+#### **types.local.ts Structure**
+```typescript
+// Base interfaces for shared props
+export interface BaseComponentProperties {
+  commonProp: string;
+  sharedState: StateType;
+}
+
+// Sub-component specific interfaces
+export interface SubComponentAProperties extends BaseComponentProperties {
+  specificPropA: string;
+  onActionA: () => void;
+}
+
+export interface SubComponentBProperties extends BaseComponentProperties {
+  specificPropB: number;
+  onActionB: (value: string) => void;
+}
+
+// Main component interface
+export interface MainComponentProperties
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'conflictingProp'>,
+    VariantProps<typeof componentVariants> {
+  mainProp: string;
+  onMainAction: (data: DataType) => void;
+}
+```
+
+### Import Patterns for Complex Components
+
+#### **Local Imports**
+```typescript
+// In main component
+import { SubComponent } from './sub-component.local';
+import type { SubComponentProperties } from './types.local';
+
+// In sub-components
+import type { LocalInterface } from './types.local';
+
+// External dependencies
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+```
+
+#### **Barrel Export Pattern**
+```typescript
+// index.ts
+export { MainComponent } from './main-component';
+// Only export main component, sub-components are internal
+```
+
+### CVA (Class Variance Authority) Patterns
+```typescript
+const componentVariants = cva(
+  "base-classes transition-all duration-300", // Always include transitions
+  {
+    variants: {
+      variant: {
+        default: "default-classes",
+        secondary: "secondary-classes",
+      },
+      size: {
+        sm: "small-classes",
+        md: "medium-classes",
+        lg: "large-classes",
+      },
+      status: { // For interactive components
+        default: "hover:scale-[1.02] hover:shadow-lg",
+        active: "ring-2 ring-primary animate-pulse",
+        disabled: "opacity-50 pointer-events-none",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "md",
+    },
+  }
+);
+```
+
+### TypeScript Standards
+- **Export all main interfaces**: `export interface ComponentProps`
+- **Use Omit for conflicts**: `extends Omit<React.HTMLAttributes<HTMLDivElement>, 'conflictingProp'>`
+- **Include JSDoc comments** for all public components and complex props
+- **Proper generics** for reusable components
+- **Variant props**: Always extend `VariantProps<typeof componentVariants>`
+- **Local types**: Keep sub-component types in `types.local.ts`
+
+### Modern React Patterns
+```typescript
+// Template structure for main component
+export const Component = React.memo(React.forwardRef<HTMLDivElement, ComponentProps>(
+  ({ className, variant, size, children, ...props }, ref) => {
+    // State with proper naming
+    const [isLoading, setIsLoading] = useState(false);
+    const [hasError, setHasError] = useState(false);
+
+    // Callbacks with useCallback for performance
+    const handleSharedAction = useCallback((data: DataType) => {
+      // Coordinate between sub-components
+    }, [/* dependencies */]);
+
+    return (
+      <div
+        ref={ref}
+        className={cn(componentVariants({ variant, size, className }))}
+        role="button" // Accessibility
+        tabIndex={0}
+        aria-label="Descriptive label"
+        onKeyDown={handleKeyDown} // Keyboard navigation
+        {...props}
+      >
+        <SubComponentA onAction={handleSharedAction} />
+        <SubComponentB state={someState} />
+        {children}
+      </div>
+    );
+  }
+));
+
+Component.displayName = 'Component';
+```
+
+### Component Decomposition Strategy
+
+#### **When to Decompose**
+- Main component > 200 lines
+- 3+ distinct UI responsibilities
+- Complex state that can be isolated
+- Reusable sub-functionality
+- Testing becomes difficult
+
+#### **How to Decompose**
+1. **Identify concerns**: UI rendering, state management, event handling
+2. **Group related code**: Elements that work together
+3. **Define interfaces**: Clear props between components
+4. **Extract sub-components**: Start with most isolated pieces
+5. **Maintain performance**: Keep React.memo and callbacks
+
+#### **Example Decomposition**
+```
+WallpaperCard (300+ lines) →
+├── ImageContainer (image loading, errors, zoom)
+├── ProgressOverlay (download progress display)
+├── StatusBadge (status indicators)
+├── CategoryBadge (category display)
+├── HoverActions (action buttons)
+└── CardFooter (info display)
+```
+
+### Accessibility (MANDATORY)
+- **ARIA labels**: Always include descriptive aria-label
+- **Keyboard navigation**: Handle Enter, Space, Escape, Arrow keys
+- **Focus management**: Proper tabIndex and focus indicators
+- **Screen reader support**: Use semantic HTML and proper roles
+- **Color contrast**: Ensure text meets WCAG guidelines
+
+### Animation & Effects (Cyber Gallery Theme)
+- **Glass Morphism**: `backdrop-blur-xl bg-white/10 border border-white/20`
+- **Hover States**: `hover:scale-[1.02] hover:shadow-2xl hover:shadow-neon/20`
+- **Smooth Transitions**: `transition-all duration-300 ease-out`
+- **Loading States**: Skeleton animations with `animate-pulse`
+- **Micro-interactions**: Subtle scale, glow, and blur effects
+
+### Performance Optimizations
+- **React.memo**: For components that receive complex props
+- **useCallback**: For event handlers and functions passed as props
+- **useMemo**: For expensive calculations
+- **Lazy loading**: `loading="lazy"` for images
+- **Error boundaries**: Graceful error handling
+- **Sub-component optimization**: Each sub-component can be memoized independently
+
+### State Management Patterns
+```typescript
+// Loading states
+const [imageLoaded, setImageLoaded] = useState(false);
+const [imageError, setImageError] = useState(false);
+const [showActions, setShowActions] = useState(false);
+
+// Error handling
+if (hasError) {
+  return (
+    <div className="flex flex-col items-center justify-center bg-glass backdrop-blur-sm">
+      <AlertCircle className="w-8 h-8 mb-2" />
+      <span className="text-sm">Failed to load</span>
+    </div>
+  );
+}
+
+// Loading states
+if (isLoading) {
+  return (
+    <div className="animate-pulse">
+      <div className="w-full h-64 bg-primary/20 rounded-xl" />
+    </div>
+  );
+}
+```
+
+### Responsive Design Standards
+- **Mobile-first**: Start with mobile styles, enhance for desktop
+- **Touch-friendly**: Minimum 44px touch targets
+- **Flexible layouts**: Use CSS Grid and Flexbox
+- **Breakpoint consistency**: sm, md, lg, xl, 2xl
+- **Adaptive spacing**: Scale padding/margins with screen size
+
+### Import Standards
+- **@ imports only**: Never use relative imports for internal modules
+- **Correct**: `import { Button } from '@/components/ui/button'`
+- **Local imports**: `import { SubComponent } from './sub-component.local'`
+- **Group imports**: External packages, then internal modules, then local
+- **Type imports**: Separate when possible for tree shaking
+
+### Component Composition Patterns
+```typescript
+// Flexible container with slots
+interface CardProps {
+  header?: React.ReactNode;
+  footer?: React.ReactNode;
+  children: React.ReactNode;
+  actions?: React.ReactNode;
+}
+
+// Compound component pattern
+const Card = ({ header, children, footer, actions }) => (
+  <div className="card-base">
+    {header && <div className="card-header">{header}</div>}
+    <div className="card-content">{children}</div>
+    {actions && <div className="card-actions">{actions}</div>}
+    {footer && <div className="card-footer">{footer}</div>}
+  </div>
+);
+```
+
+### Error Handling & Empty States
+- **Loading states**: Skeleton UI with proper animations
+- **Error states**: Clear messaging with retry options
+- **Empty states**: Helpful messaging and suggested actions
+- **Network errors**: Graceful degradation and fallbacks
+
+### Testing Considerations
+- **Props interfaces**: Export for testing
+- **Display names**: Always set for debugging
+- **Event handlers**: Testable callback patterns
+- **Sub-component isolation**: Each can be tested independently
+- **State exposure**: Consider exposing state for testing when needed
+
+## Advanced Patterns
+
+### Complex Component Structure Example
+```typescript
+// wallpaper-card/wallpaper-card.tsx (Main orchestrator)
+export const WallpaperCard = React.memo<WallpaperCardProps>(({
+  wallpaper,
+  downloadStatus,
+  onDownload,
+  onPreview,
+  ...props
+}) => {
+  // Orchestration state only
+  const [showHoverActions, setShowHoverActions] = useState(false);
+
+  // Coordinate between sub-components
+  const handleDownload = useCallback(() => {
+    onDownload(wallpaper);
+  }, [onDownload, wallpaper]);
+
+  return (
+    <div className="main-container" {...props}>
+      <ImageContainer
+        wallpaper={wallpaper}
+        showHoverActions={showHoverActions}
+      />
+      <StatusBadge status={downloadStatus} />
+      <HoverActions
+        isVisible={showHoverActions}
+        onDownload={handleDownload}
+        onPreview={onPreview}
+      />
+    </div>
+  );
+});
+```
+
+### Grid Layout Component
+```typescript
+const gridVariants = cva("grid gap-4", {
+  variants: {
+    layout: {
+      auto: "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5",
+      masonry: "columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5",
+      compact: "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6",
+    },
+    spacing: {
+      sm: "gap-2", md: "gap-4", lg: "gap-6", xl: "gap-8",
+    },
+  },
+});
+```
+
+## Export Patterns
+```typescript
+// Complex component folder index.ts
+export { MainComponent } from './main-component';
+// Sub-components are internal, not exported
+
+// Gallery/feature index.ts
+export { WallpaperCard } from '../wallpaper-card';
+export { WallpaperGrid } from './wallpaper-grid';
+```
+
+## Component Checklist
+
+### Basic Requirements
+- [ ] Used ShadCN CLI for base components
+- [ ] Implemented CVA variants system
+- [ ] Added proper TypeScript interfaces (exported)
+- [ ] Included accessibility attributes
+- [ ] Added keyboard navigation
+- [ ] Implemented loading/error states
+- [ ] Added smooth animations/transitions
+- [ ] Used @ imports throughout
+- [ ] Included React.memo/useCallback for performance
+- [ ] Added proper display name
+- [ ] Created barrel exports
+- [ ] Tested responsive behavior
+
+### Complex Component Requirements
+- [ ] **Decomposed appropriately**: No single component > 200 lines
+- [ ] **Own folder structure**: Following API/hooks pattern
+- [ ] **Local sub-components**: Using .local.tsx suffix
+- [ ] **Types organization**: Local types in types.local.ts
+- [ ] **Single responsibility**: Each sub-component has clear purpose
+- [ ] **Main as orchestrator**: Coordinates sub-components
+- [ ] **Performance maintained**: React.memo on sub-components
+- [ ] **Testability**: Sub-components can be tested independently
+- [ ] **Clear interfaces**: Well-defined props between components
+- [ ] **Import organization**: Local imports properly structured
+
+## Common Patterns to Avoid
+- ❌ Creating ShadCN components manually
+- ❌ Using relative imports (../../../)
+- ❌ Missing accessibility attributes
+- ❌ No keyboard navigation
+- ❌ Missing loading/error states
+- ❌ No animation transitions
+- ❌ Props interface not exported
+- ❌ Missing display name
+- ❌ No error boundaries
+- ❌ Hardcoded values instead of variants
+- ❌ **Monolithic components > 200 lines**
+- ❌ **Mixed concerns in single component**
+- ❌ **Sub-components without .local.tsx suffix**
+- ❌ **No types.local.ts for complex components**
+- ❌ **Exporting internal sub-components**
+# Component Generation Rules
+
+## General Component Guidelines
+
+### ShadCN Integration (CRITICAL)
+- **ALWAYS use ShadCN CLI first**: `npx shadcn@latest add [component-name]`
+- **Never manually create** components that exist in ShadCN registry
+- **Copy & Own Approach**: Improve/extend existing ShadCN components rather than replacing
+- **Check Registry**: Before creating, verify component doesn't exist at https://ui.shadcn.com/docs/components
+
+### Folder Structure & Component Organization
+
+#### **Simple Components** (< 100 lines)
+- Single file in appropriate category folder
+- Example: `src/components/ui/badge.tsx`
+
+#### **Complex Components** (> 100 lines or multiple concerns)
+- **Own folder**: Following API/hooks pattern
+- **Folder structure**:
+```
+src/components/component-name/
+├── index.ts                    # Barrel export
+├── component-name.tsx          # Main orchestrator
+├── types.local.ts              # Local type definitions
+├── sub-component.local.tsx     # Sub-components with .local.tsx suffix
+├── another-sub.local.tsx       # Additional sub-components
+└── utils.local.ts              # Component-specific utilities (if needed)
+```
+
+#### **Component Decomposition Guidelines**
+- **Break components when**:
+  - Main component > 200 lines
+  - Multiple distinct UI concerns (e.g., image handling + progress + actions)
+  - Reusable sub-functionality within the component
+  - Complex state management that can be isolated
+
+- **Sub-component criteria**:
+  - Single responsibility principle
+  - 20-100 lines per sub-component
+  - Clear, focused interface
+  - Independent testability
+
+### Sub-Component Patterns
+
+#### **Naming Conventions**
+- **Main component**: `ComponentName.tsx`
+- **Sub-components**: `sub-component-name.local.tsx`
+- **Types**: `types.local.ts`
+- **Utils**: `utils.local.ts`
+- **Tests**: `component-name.test.tsx`
+
+#### **Local Sub-Component Structure**
+```typescript
+// image-container.local.tsx
+import React from 'react';
+import { cn } from '@/lib/utils';
+import type { ImageContainerProperties } from './types.local';
+
+export const ImageContainer: React.FC<ImageContainerProperties> = ({
+  // props
+}) => {
+  // Single-purpose component logic
+  return (
+    <div className="focused-responsibility">
+      {/* Specific UI concern */}
+    </div>
+  );
+};
+```
+
+#### **Main Component as Orchestrator**
+```typescript
+// main-component.tsx
+import React, { useState, useCallback } from 'react';
+import { SubComponentA } from './sub-component-a.local';
+import { SubComponentB } from './sub-component-b.local';
+import type { MainComponentProps } from './types.local';
+
+export const MainComponent = React.memo<MainComponentProps>(({
+  // Main props
+}) => {
+  // Orchestration logic only
+  const [sharedState, setSharedState] = useState();
+
+  const handleSharedAction = useCallback(() => {
+    // Coordinate between sub-components
+  }, []);
+
+  return (
+    <div className="main-container">
+      <SubComponentA
+        onAction={handleSharedAction}
+        // Pass relevant props
+      />
+      <SubComponentB
+        state={sharedState}
+        // Pass relevant props
+      />
+    </div>
+  );
+});
+```
+
+### Local Types Organization
+
+#### **types.local.ts Structure**
+```typescript
+// Base interfaces for shared props
+export interface BaseComponentProperties {
+  commonProp: string;
+  sharedState: StateType;
+}
+
+// Sub-component specific interfaces
+export interface SubComponentAProperties extends BaseComponentProperties {
+  specificPropA: string;
+  onActionA: () => void;
+}
+
+export interface SubComponentBProperties extends BaseComponentProperties {
+  specificPropB: number;
+  onActionB: (value: string) => void;
+}
+
+// Main component interface
+export interface MainComponentProperties
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'conflictingProp'>,
+    VariantProps<typeof componentVariants> {
+  mainProp: string;
+  onMainAction: (data: DataType) => void;
+}
+```
+
+### Import Patterns for Complex Components
+
+#### **Local Imports**
+```typescript
+// In main component
+import { SubComponent } from './sub-component.local';
+import type { SubComponentProperties } from './types.local';
+
+// In sub-components
+import type { LocalInterface } from './types.local';
+
+// External dependencies
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+```
+
+#### **Barrel Export Pattern**
+```typescript
+// index.ts
+export { MainComponent } from './main-component';
+// Only export main component, sub-components are internal
+```
+
+### CVA (Class Variance Authority) Patterns
+```typescript
+const componentVariants = cva(
+  "base-classes transition-all duration-300", // Always include transitions
+  {
+    variants: {
+      variant: {
+        default: "default-classes",
+        secondary: "secondary-classes",
+      },
+      size: {
+        sm: "small-classes",
+        md: "medium-classes",
+        lg: "large-classes",
+      },
+      status: { // For interactive components
+        default: "hover:scale-[1.02] hover:shadow-lg",
+        active: "ring-2 ring-primary animate-pulse",
+        disabled: "opacity-50 pointer-events-none",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "md",
+    },
+  }
+);
+```
+
+### TypeScript Standards
+- **Export all main interfaces**: `export interface ComponentProps`
+- **Use Omit for conflicts**: `extends Omit<React.HTMLAttributes<HTMLDivElement>, 'conflictingProp'>`
+- **Include JSDoc comments** for all public components and complex props
+- **Proper generics** for reusable components
+- **Variant props**: Always extend `VariantProps<typeof componentVariants>`
+- **Local types**: Keep sub-component types in `types.local.ts`
+
+### Modern React Patterns
+```typescript
+// Template structure for main component
+export const Component = React.memo(React.forwardRef<HTMLDivElement, ComponentProps>(
+  ({ className, variant, size, children, ...props }, ref) => {
+    // State with proper naming
+    const [isLoading, setIsLoading] = useState(false);
+    const [hasError, setHasError] = useState(false);
+
+    // Callbacks with useCallback for performance
+    const handleSharedAction = useCallback((data: DataType) => {
+      // Coordinate between sub-components
+    }, [/* dependencies */]);
+
+    return (
+      <div
+        ref={ref}
+        className={cn(componentVariants({ variant, size, className }))}
+        role="button" // Accessibility
+        tabIndex={0}
+        aria-label="Descriptive label"
+        onKeyDown={handleKeyDown} // Keyboard navigation
+        {...props}
+      >
+        <SubComponentA onAction={handleSharedAction} />
+        <SubComponentB state={someState} />
+        {children}
+      </div>
+    );
+  }
+));
+
+Component.displayName = 'Component';
+```
+
+### Component Decomposition Strategy
+
+#### **When to Decompose**
+- Main component > 200 lines
+- 3+ distinct UI responsibilities
+- Complex state that can be isolated
+- Reusable sub-functionality
+- Testing becomes difficult
+
+#### **How to Decompose**
+1. **Identify concerns**: UI rendering, state management, event handling
+2. **Group related code**: Elements that work together
+3. **Define interfaces**: Clear props between components
+4. **Extract sub-components**: Start with most isolated pieces
+5. **Maintain performance**: Keep React.memo and callbacks
+
+#### **Example Decomposition**
+```
+WallpaperCard (300+ lines) →
+├── ImageContainer (image loading, errors, zoom)
+├── ProgressOverlay (download progress display)
+├── StatusBadge (status indicators)
+├── CategoryBadge (category display)
+├── HoverActions (action buttons)
+└── CardFooter (info display)
+```
+
+### Accessibility (MANDATORY)
+- **ARIA labels**: Always include descriptive aria-label
+- **Keyboard navigation**: Handle Enter, Space, Escape, Arrow keys
+- **Focus management**: Proper tabIndex and focus indicators
+- **Screen reader support**: Use semantic HTML and proper roles
+- **Color contrast**: Ensure text meets WCAG guidelines
+
+### Animation & Effects (Cyber Gallery Theme)
+- **Glass Morphism**: `backdrop-blur-xl bg-white/10 border border-white/20`
+- **Hover States**: `hover:scale-[1.02] hover:shadow-2xl hover:shadow-neon/20`
+- **Smooth Transitions**: `transition-all duration-300 ease-out`
+- **Loading States**: Skeleton animations with `animate-pulse`
+- **Micro-interactions**: Subtle scale, glow, and blur effects
+
+### Performance Optimizations
+- **React.memo**: For components that receive complex props
+- **useCallback**: For event handlers and functions passed as props
+- **useMemo**: For expensive calculations
+- **Lazy loading**: `loading="lazy"` for images
+- **Error boundaries**: Graceful error handling
+- **Sub-component optimization**: Each sub-component can be memoized independently
+
+### State Management Patterns
+```typescript
+// Loading states
+const [imageLoaded, setImageLoaded] = useState(false);
+const [imageError, setImageError] = useState(false);
+const [showActions, setShowActions] = useState(false);
+
+// Error handling
+if (hasError) {
+  return (
+    <div className="flex flex-col items-center justify-center bg-glass backdrop-blur-sm">
+      <AlertCircle className="w-8 h-8 mb-2" />
+      <span className="text-sm">Failed to load</span>
+    </div>
+  );
+}
+
+// Loading states
+if (isLoading) {
+  return (
+    <div className="animate-pulse">
+      <div className="w-full h-64 bg-primary/20 rounded-xl" />
+    </div>
+  );
+}
+```
+
+### Responsive Design Standards
+- **Mobile-first**: Start with mobile styles, enhance for desktop
+- **Touch-friendly**: Minimum 44px touch targets
+- **Flexible layouts**: Use CSS Grid and Flexbox
+- **Breakpoint consistency**: sm, md, lg, xl, 2xl
+- **Adaptive spacing**: Scale padding/margins with screen size
+
+### Import Standards
+- **@ imports only**: Never use relative imports for internal modules
+- **Correct**: `import { Button } from '@/components/ui/button'`
+- **Local imports**: `import { SubComponent } from './sub-component.local'`
+- **Group imports**: External packages, then internal modules, then local
+- **Type imports**: Separate when possible for tree shaking
+
+### Component Composition Patterns
+```typescript
+// Flexible container with slots
+interface CardProps {
+  header?: React.ReactNode;
+  footer?: React.ReactNode;
+  children: React.ReactNode;
+  actions?: React.ReactNode;
+}
+
+// Compound component pattern
+const Card = ({ header, children, footer, actions }) => (
+  <div className="card-base">
+    {header && <div className="card-header">{header}</div>}
+    <div className="card-content">{children}</div>
+    {actions && <div className="card-actions">{actions}</div>}
+    {footer && <div className="card-footer">{footer}</div>}
+  </div>
+);
+```
+
+### Error Handling & Empty States
+- **Loading states**: Skeleton UI with proper animations
+- **Error states**: Clear messaging with retry options
+- **Empty states**: Helpful messaging and suggested actions
+- **Network errors**: Graceful degradation and fallbacks
+
+### Testing Considerations
+- **Props interfaces**: Export for testing
+- **Display names**: Always set for debugging
+- **Event handlers**: Testable callback patterns
+- **Sub-component isolation**: Each can be tested independently
+- **State exposure**: Consider exposing state for testing when needed
+
+## Advanced Patterns
+
+### Complex Component Structure Example
+```typescript
+// wallpaper-card/wallpaper-card.tsx (Main orchestrator)
+export const WallpaperCard = React.memo<WallpaperCardProps>(({
+  wallpaper,
+  downloadStatus,
+  onDownload,
+  onPreview,
+  ...props
+}) => {
+  // Orchestration state only
+  const [showHoverActions, setShowHoverActions] = useState(false);
+
+  // Coordinate between sub-components
+  const handleDownload = useCallback(() => {
+    onDownload(wallpaper);
+  }, [onDownload, wallpaper]);
+
+  return (
+    <div className="main-container" {...props}>
+      <ImageContainer
+        wallpaper={wallpaper}
+        showHoverActions={showHoverActions}
+      />
+      <StatusBadge status={downloadStatus} />
+      <HoverActions
+        isVisible={showHoverActions}
+        onDownload={handleDownload}
+        onPreview={onPreview}
+      />
+    </div>
+  );
+});
+```
+
+### Grid Layout Component
+```typescript
+const gridVariants = cva("grid gap-4", {
+  variants: {
+    layout: {
+      auto: "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5",
+      masonry: "columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5",
+      compact: "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6",
+    },
+    spacing: {
+      sm: "gap-2", md: "gap-4", lg: "gap-6", xl: "gap-8",
+    },
+  },
+});
+```
+
+## Export Patterns
+```typescript
+// Complex component folder index.ts
+export { MainComponent } from './main-component';
+// Sub-components are internal, not exported
+
+// Gallery/feature index.ts
+export { WallpaperCard } from '../wallpaper-card';
+export { WallpaperGrid } from './wallpaper-grid';
+```
+
+## Component Checklist
+
+### Basic Requirements
+- [ ] Used ShadCN CLI for base components
+- [ ] Implemented CVA variants system
+- [ ] Added proper TypeScript interfaces (exported)
+- [ ] Included accessibility attributes
+- [ ] Added keyboard navigation
+- [ ] Implemented loading/error states
+- [ ] Added smooth animations/transitions
+- [ ] Used @ imports throughout
+- [ ] Included React.memo/useCallback for performance
+- [ ] Added proper display name
+- [ ] Created barrel exports
+- [ ] Tested responsive behavior
+
+### Complex Component Requirements
+- [ ] **Decomposed appropriately**: No single component > 200 lines
+- [ ] **Own folder structure**: Following API/hooks pattern
+- [ ] **Local sub-components**: Using .local.tsx suffix
+- [ ] **Types organization**: Local types in types.local.ts
+- [ ] **Single responsibility**: Each sub-component has clear purpose
+- [ ] **Main as orchestrator**: Coordinates sub-components
+- [ ] **Performance maintained**: React.memo on sub-components
+- [ ] **Testability**: Sub-components can be tested independently
+- [ ] **Clear interfaces**: Well-defined props between components
+- [ ] **Import organization**: Local imports properly structured
+
+## Common Patterns to Avoid
+- ❌ Creating ShadCN components manually
+- ❌ Using relative imports (../../../)
+- ❌ Missing accessibility attributes
+- ❌ No keyboard navigation
+- ❌ Missing loading/error states
+- ❌ No animation transitions
+- ❌ Props interface not exported
+- ❌ Missing display name
+- ❌ No error boundaries
+- ❌ Hardcoded values instead of variants
+- ❌ **Monolithic components > 200 lines**
+- ❌ **Mixed concerns in single component**
+- ❌ **Sub-components without .local.tsx suffix**
+- ❌ **No types.local.ts for complex components**
+- ❌ **Exporting internal sub-components**
