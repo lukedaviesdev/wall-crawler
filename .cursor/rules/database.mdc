@@ -1,0 +1,292 @@
+# Database Module Rules
+
+## Module Organization
+
+### File Structure
+- **Connection**: `connection.ts` - Database connection, schema, initialization
+- **Domain Operations**: Separate files per domain (e.g., `categories.ts`, `wallpapers.ts`)
+- **Metadata**: `metadata.ts` - Sync metadata, analytics, statistics
+- **Sync**: `sync.ts` - Data synchronization operations
+- **Barrel Export**: `index.ts` - Clean API exports
+
+### Size Guidelines
+- **Maximum 150 lines per file** (excluding comments)
+- **Single responsibility** - Each file handles one domain
+- **Break down immediately** if file becomes verbose (>200 lines)
+
+## Architecture Patterns
+
+### Functional Approach
+```typescript
+// ✅ Functional style (consistent with app)
+export const getWallpapers = (filters: Filters): Wallpaper[] => {
+  const db = getDb();
+  // ...
+};
+
+// ❌ Class-based approach
+class WallpaperRepository {
+  getWallpapers() { /* ... */ }
+}
+```
+
+### Connection Management
+```typescript
+// ✅ Singleton pattern with lazy initialization
+let database: Database.Database | null = null;
+
+export const getDb = (): Database.Database => {
+  if (!database) {
+    database = new Database(DB_PATH, { fileMustExist: false });
+    // Configure and initialize schema
+  }
+  return database;
+};
+```
+
+### Import Standards
+```typescript
+// ✅ Use @ imports consistently
+import { getDb } from '@/lib/database/connection';
+import type { DatabaseWallpaper } from '@/types/database';
+
+// ❌ Relative imports
+import { getDb } from './connection';
+```
+
+## Database Configuration
+
+### SQLite Optimization
+```typescript
+// ✅ Enable performance optimizations
+database.pragma('journal_mode = WAL');
+database.pragma('synchronous = NORMAL');
+```
+
+### Schema Best Practices
+```sql
+-- ✅ Proper constraints and indexes
+CREATE TABLE wallpapers (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  github_id TEXT NOT NULL UNIQUE,
+  -- Foreign key constraints
+  FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE
+);
+
+-- ✅ Performance indexes
+CREATE INDEX IF NOT EXISTS idx_wallpapers_category_id ON wallpapers(category_id);
+CREATE INDEX IF NOT EXISTS idx_wallpapers_is_featured ON wallpapers(is_featured);
+```
+
+## Query Patterns
+
+### Prepared Statements
+```typescript
+// ✅ Use prepared statements for performance
+export const getWallpapers = (filters: Filters): Wallpaper[] => {
+  const db = getDb();
+  const stmt = db.prepare('SELECT * FROM wallpapers WHERE category_id = ?');
+  return stmt.all(filters.categoryId) as Wallpaper[];
+};
+
+// ❌ String concatenation (SQL injection risk)
+const query = `SELECT * FROM wallpapers WHERE category_id = ${categoryId}`;
+```
+
+### Dynamic Queries
+```typescript
+// ✅ Build dynamic queries safely
+export const getWallpapers = (filters: Filters): Wallpaper[] => {
+  let query = 'SELECT * FROM wallpapers WHERE 1=1';
+  const parameters: unknown[] = [];
+
+  if (filters.categoryId) {
+    query += ' AND category_id = ?';
+    parameters.push(filters.categoryId);
+  }
+
+  const stmt = db.prepare(query);
+  return stmt.all(...parameters) as Wallpaper[];
+};
+```
+
+## Data Type Handling
+
+### Boolean Conversion
+```typescript
+// ✅ Convert booleans for SQLite
+if (filters.isFeatured !== undefined) {
+  query += ' AND is_featured = ?';
+  parameters.push(filters.isFeatured ? 1 : 0); // SQLite requires 0/1
+}
+```
+
+### Null Handling
+```typescript
+// ✅ Explicit null handling
+const result = stmt.run(
+  wallpaper.name,
+  wallpaper.description || null, // Explicit null for optional fields
+  wallpaper.metadata ? JSON.stringify(wallpaper.metadata) : null
+);
+```
+
+## Error Handling
+
+### Graceful Failures
+```typescript
+// ✅ Return meaningful errors
+export const createWallpaper = (wallpaper: NewWallpaper): Result<Wallpaper> => {
+  try {
+    const db = getDb();
+    const stmt = db.prepare(/* ... */);
+    const result = stmt.run(/* ... */);
+    return { success: true, data: getCreatedWallpaper(result.lastInsertRowid) };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+};
+```
+
+## Module Exports
+
+### Barrel Pattern
+```typescript
+// ✅ Clean barrel exports in index.ts
+// Connection and schema
+export { getDb, closeDb } from './connection';
+
+// Category operations
+export {
+  getCategories,
+  getCategoryBySlug,
+  createCategory,
+} from './categories';
+
+// Wallpaper operations
+export {
+  getWallpapers,
+  getWallpaperById,
+  createWallpaper,
+} from './wallpapers';
+```
+
+### Consistent Naming
+```typescript
+// ✅ Consistent function naming
+export const getWallpapers = () => { /* ... */ };
+export const getWallpaperById = (id: number) => { /* ... */ };
+export const createWallpaper = (wallpaper: NewWallpaper) => { /* ... */ };
+export const updateWallpaper = (id: number, updates: WallpaperUpdates) => { /* ... */ };
+export const deleteWallpaper = (id: number) => { /* ... */ };
+
+// ✅ Consistent operation naming
+export const incrementDownloadCount = (id: number) => { /* ... */ };
+export const incrementViewCount = (id: number) => { /* ... */ };
+```
+
+## Performance Considerations
+
+### Prepared Statement Reuse
+```typescript
+// ✅ Prepare statements once, reuse many times
+const stmtCache = new Map<string, Database.Statement>();
+
+const getStatement = (query: string): Database.Statement => {
+  if (!stmtCache.has(query)) {
+    stmtCache.set(query, getDb().prepare(query));
+  }
+  return stmtCache.get(query)!;
+};
+```
+
+### Batch Operations
+```typescript
+// ✅ Use transactions for batch operations
+export const createMultipleWallpapers = (wallpapers: NewWallpaper[]): boolean => {
+  const db = getDb();
+  const insert = db.prepare(/* INSERT query */);
+
+  const transaction = db.transaction((wallpapers: NewWallpaper[]) => {
+    for (const wallpaper of wallpapers) {
+      insert.run(wallpaper);
+    }
+  });
+
+  try {
+    transaction(wallpapers);
+    return true;
+  } catch {
+    return false;
+  }
+};
+```
+
+## Anti-Patterns
+
+### What to Avoid
+- ❌ **Monolithic files** - Don't put all operations in one file
+- ❌ **Class-based repositories** - Keep functional for consistency
+- ❌ **SQL injection** - Always use prepared statements
+- ❌ **Synchronous operations** - Keep database calls in service layer
+- ❌ **Mixed concerns** - Don't mix database logic with business logic
+- ❌ **Hardcoded queries** - Use dynamic query building when needed
+- ❌ **Missing indexes** - Always add indexes for frequently queried columns
+- ❌ **No error handling** - Always handle database errors gracefully
+
+## Migration Strategy
+
+### Schema Changes
+```typescript
+// ✅ Version-based migrations
+const DB_VERSION = 2;
+
+const initializeSchema = (): void => {
+  const db = getDb();
+  const version = db.pragma('user_version', { simple: true }) as number;
+
+  if (version < DB_VERSION) {
+    runMigrations(version, DB_VERSION);
+    db.pragma(`user_version = ${DB_VERSION}`);
+  }
+};
+```
+
+## Testing Guidelines
+
+### Test Data Management
+```typescript
+// ✅ Clean test database for each test
+beforeEach(() => {
+  const db = getDb();
+  db.exec('DELETE FROM wallpapers');
+  db.exec('DELETE FROM categories');
+});
+```
+
+### Mock Database Operations
+```typescript
+// ✅ Mock database for unit tests
+jest.mock('@/lib/database', () => ({
+  getWallpapers: jest.fn(),
+  createWallpaper: jest.fn(),
+}));
+```
+
+## Documentation
+
+### Function Documentation
+```typescript
+/**
+ * Get wallpapers with optional filtering
+ * @param filters - Optional filters to apply
+ * @returns Array of wallpapers matching filters
+ * @throws DatabaseError if query fails
+ */
+export const getWallpapers = (filters?: WallpaperFilters): Wallpaper[] => {
+  // Implementation
+};
+```
+globs: src/lib/database/*.ts
+alwaysApply: false
+---

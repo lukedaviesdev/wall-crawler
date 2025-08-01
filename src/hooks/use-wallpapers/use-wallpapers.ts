@@ -1,14 +1,19 @@
 import React from 'react';
 import { useQuery, useInfiniteQuery } from 'react-query';
 
+// Smart wallpaper service (cache-aside pattern)
 import {
   getAllWallpapers,
-  getCategoriesLight,
-  getFeaturedWallpapers,
-  getWallpapersByCategory,
   searchWallpapers,
   getWallpapersPaginated,
 } from '@/lib/github-api';
+import {
+  getCategories,
+  getWallpapersByCategory,
+  getFeaturedWallpapers,
+} from '@/lib/wallpaper-service';
+
+// GitHub API for fallback operations
 
 import type { WallpaperItem, WallpaperFilters } from '@/types/wallpaper';
 
@@ -32,7 +37,7 @@ export const wallpaperKeys = {
 export const useCategories = () => {
   return useQuery({
     queryKey: wallpaperKeys.categories(),
-    queryFn: getCategoriesLight,
+    queryFn: getCategories,
     staleTime: 1000 * 60 * 30, // 30 minutes
     cacheTime: 1000 * 60 * 60, // 1 hour
   });
