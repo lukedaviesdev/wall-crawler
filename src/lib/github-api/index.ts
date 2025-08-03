@@ -3,4 +3,5 @@ export {
   GitHubApiError,
   getCategoriesLight,
   getFeaturedWallpapers,
+  getWallpapersByCategoryLimited,
 } from './github-api';

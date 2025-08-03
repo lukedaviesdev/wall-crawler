@@ -1,5 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
+import {
+  LoadingState,
+  DataFetchStatus,
+  SyncStatusIndicator,
+} from '@/components/loading';
 import { WallpaperGrid, WallpaperCard } from '@/components/wallpaper-grid';
 import { useDownloads } from '@/hooks/use-downloads';
 import {
@@ -12,25 +17,32 @@ import type { WallpaperItem } from '@/types/wallpaper';
 
 export const GalleryPage: React.FC = () => {
   const downloads = useDownloads();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  // Fetch featured wallpapers immediately for better UX
+  // Fetch featured wallpapers immediately for better UX (reduced to avoid rate limits)
   const featuredQuery = useFeaturedWallpapers(3);
 
   // Fetch categories (lightweight)
   const categoriesQuery = useCategories();
 
-  // For demo: also fetch wallpapers from first category
-  const firstCategory = categoriesQuery.data?.[0];
-  const wallpapersQuery = useWallpapersByCategory(
-    firstCategory?.slug || '',
-    !!firstCategory,
+  // Fetch wallpapers from selected category (if any)
+  const categoryWallpapersQuery = useWallpapersByCategory(
+    selectedCategory || '',
+    !!selectedCategory,
   );
 
-  // Use featured wallpapers if available, otherwise use category wallpapers
-  const wallpapers = featuredQuery.data || wallpapersQuery.data || [];
-  const isLoading =
-    featuredQuery.isLoading ||
-    (!featuredQuery.data && wallpapersQuery.isLoading);
+  // Determine what wallpapers to show
+  const wallpapers = selectedCategory
+    ? categoryWallpapersQuery.data || []
+    : featuredQuery.data || [];
+
+  const isInitialLoading = featuredQuery.isLoading && !featuredQuery.data;
+  const isCategoryLoading =
+    categoryWallpapersQuery.isLoading && !!selectedCategory;
+  const hasError =
+    featuredQuery.error ||
+    categoriesQuery.error ||
+    categoryWallpapersQuery.error;
 
   const handleDownload = (wallpaper: WallpaperItem) => {
     downloads.startDownload(wallpaper);
@@ -41,33 +53,21 @@ export const GalleryPage: React.FC = () => {
     console.log('Preview wallpaper:', wallpaper.name);
   };
 
-  // Loading state
-  if (isLoading && !wallpapers.length) {
-    return (
-      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-neon mx-auto mb-4"></div>
-          <p className="text-lg text-muted-foreground">
-            Loading featured wallpapers...
-          </p>
-        </div>
-      </div>
-    );
-  }
+  const handleCategorySelect = (categorySlug: string | null) => {
+    setSelectedCategory(categorySlug);
+  };
 
-  // Error state
-  if (categoriesQuery.error) {
-    return (
-      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-xl text-red-400 mb-2">Failed to load categories</p>
-          <p className="text-muted-foreground">Please try again later</p>
-        </div>
-      </div>
-    );
-  }
+  const getLoadingMessage = () => {
+    if (isInitialLoading) return 'Loading featured wallpapers...';
+    if (isCategoryLoading) return `Loading ${selectedCategory} wallpapers...`;
+    return 'Loading wallpapers...';
+  };
 
-  const totalCategories = categoriesQuery.data?.length || 0;
+  const getLoadingSubmessage = () => {
+    if (isInitialLoading) return 'Fetching popular wallpapers from cache';
+    if (isCategoryLoading) return 'Checking database and syncing if needed';
+    return undefined;
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -80,10 +80,39 @@ export const GalleryPage: React.FC = () => {
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Discover and download stunning wallpapers from the dharmx/walls
-              collection. High-quality images across {totalCategories}{' '}
-              categories.
+              collection. High-quality images across{' '}
+              {categoriesQuery.data?.length || 'many'} categories.
             </p>
           </div>
+
+          {/* Category Navigation */}
+          {categoriesQuery.data && (
+            <div className="mt-6 flex items-center justify-center gap-2 flex-wrap">
+              <button
+                onClick={() => handleCategorySelect(null)}
+                className={`px-3 py-1.5 text-sm rounded-full transition-colors ${
+                  !selectedCategory
+                    ? 'bg-neon/20 text-neon border border-neon/30'
+                    : 'bg-muted/20 text-muted-foreground hover:bg-muted/30'
+                }`}
+              >
+                Featured
+              </button>
+              {categoriesQuery.data.slice(0, 8).map((category) => (
+                <button
+                  key={category.slug}
+                  onClick={() => handleCategorySelect(category.slug)}
+                  className={`px-3 py-1.5 text-sm rounded-full transition-colors ${
+                    selectedCategory === category.slug
+                      ? 'bg-neon/20 text-neon border border-neon/30'
+                      : 'bg-muted/20 text-muted-foreground hover:bg-muted/30'
+                  }`}
+                >
+                  {category.name}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </header>
 
@@ -91,49 +120,93 @@ export const GalleryPage: React.FC = () => {
       <div className="border-b bg-muted/20">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <span>
-              {isLoading && !wallpapers.length
-                ? 'Loading wallpapers...'
-                : featuredQuery.data
-                  ? `Showing ${wallpapers.length} featured wallpapers from popular categories`
-                  : `Showing ${wallpapers.length} wallpapers from "${firstCategory?.name || 'Unknown'}" category`}
-            </span>
+            <div className="flex items-center gap-4">
+              <span>
+                {selectedCategory
+                  ? `${wallpapers.length} wallpapers in "${selectedCategory}"`
+                  : `${wallpapers.length} featured wallpapers`}
+              </span>
+
+              {/* Sync Status */}
+              {(isCategoryLoading || isInitialLoading) && (
+                <SyncStatusIndicator
+                  status="syncing"
+                  message={
+                    isCategoryLoading ? 'Syncing category' : 'Loading featured'
+                  }
+                  compact
+                />
+              )}
+            </div>
+
             <span>Downloaded: {downloads.totalDownloaded}</span>
           </div>
         </div>
       </div>
 
-      {/* Gallery */}
+      {/* Main Content */}
       <main className="container mx-auto py-8">
-        {isLoading && !wallpapers.length ? (
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neon mx-auto mb-4"></div>
-            <p className="text-muted-foreground">
-              Loading{' '}
-              {featuredQuery.isLoading ? 'featured' : firstCategory?.name}{' '}
-              wallpapers...
-            </p>
-          </div>
-        ) : wallpapers.length > 0 ? (
-          <WallpaperGrid layout="auto" spacing="md">
-            {wallpapers.map((wallpaper) => (
-              <WallpaperCard
-                key={wallpaper.id}
-                wallpaper={wallpaper}
-                downloadStatus={downloads.getDownloadStatus(wallpaper.id)}
-                downloadProgress={downloads.downloadProgress(wallpaper.id)}
-                onDownload={handleDownload}
-                onPause={downloads.pauseDownload}
-                onCancel={downloads.cancelDownload}
-                onPreview={handlePreview}
-                size="md"
+        {/* Error State */}
+        <DataFetchStatus
+          isLoading={false}
+          isError={!!hasError}
+          isEmpty={false}
+          error={hasError as Error | null}
+          errorMessage="Failed to load wallpapers. Please try again later."
+        />
+
+        {/* Initial Loading State */}
+        {isInitialLoading && (
+          <LoadingState
+            message={getLoadingMessage()}
+            submessage={getLoadingSubmessage()}
+            showSkeleton={true}
+            skeletonCount={6}
+          />
+        )}
+
+        {/* Category Loading State */}
+        {isCategoryLoading && (
+          <LoadingState
+            message={getLoadingMessage()}
+            submessage={getLoadingSubmessage()}
+            showSkeleton={true}
+            skeletonCount={8}
+          />
+        )}
+
+        {/* Content */}
+        {!isInitialLoading && !isCategoryLoading && !hasError && (
+          <>
+            {wallpapers.length > 0 ? (
+              <WallpaperGrid layout="auto" spacing="md">
+                {wallpapers.map((wallpaper) => (
+                  <WallpaperCard
+                    key={wallpaper.id}
+                    wallpaper={wallpaper}
+                    downloadStatus={downloads.getDownloadStatus(wallpaper.id)}
+                    downloadProgress={downloads.downloadProgress(wallpaper.id)}
+                    onDownload={handleDownload}
+                    onPause={downloads.pauseDownload}
+                    onCancel={downloads.cancelDownload}
+                    onPreview={handlePreview}
+                    size="md"
+                  />
+                ))}
+              </WallpaperGrid>
+            ) : (
+              <DataFetchStatus
+                isLoading={false}
+                isError={false}
+                isEmpty={true}
+                emptyMessage={
+                  selectedCategory
+                    ? `No wallpapers found in "${selectedCategory}" category`
+                    : 'No featured wallpapers available'
+                }
               />
-            ))}
-          </WallpaperGrid>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-lg text-muted-foreground">No wallpapers found</p>
-          </div>
+            )}
+          </>
         )}
       </main>
     </div>

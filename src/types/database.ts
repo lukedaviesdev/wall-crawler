@@ -59,9 +59,8 @@ export interface DatabaseAnalytics {
   id: number;
   event_type: 'view' | 'download' | 'search' | 'category_view';
   wallpaper_id?: number;
-  category_id?: number;
-  search_query?: string;
-  user_agent?: string;
+  category_name?: string;
+  metadata?: string;
   timestamp: string;
 }
 

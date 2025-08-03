@@ -36,3 +36,5 @@ export {
   syncCategories,
   getSyncStatus as getSyncOperationStatus,
 } from './sync';
+
+// Debug utilities are available separately in ./debug.ts (browser only)

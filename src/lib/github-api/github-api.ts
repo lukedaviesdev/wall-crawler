@@ -193,6 +193,31 @@ export const getWallpapersByCategory = async (
 };
 
 /**
+ * Get a limited number of wallpapers from a specific category (for initial loads)
+ */
+export const getWallpapersByCategoryLimited = async (
+  categorySlug: string,
+  limit: number = 6,
+): Promise<WallpaperItem[]> => {
+  // Find the actual category path (case-sensitive)
+  const categories = await getCategories();
+  const category = categories.find((cat) => cat.slug === categorySlug);
+
+  if (!category) {
+    throw new GitHubApiError(`Category "${categorySlug}" not found`, 404, '');
+  }
+
+  const contents = await fetchDirectoryContents(`/${category.path}`);
+
+  const wallpapers = contents
+    .filter((item) => item.type === 'file' && isImageFile(item.name))
+    .slice(0, limit) // Limit the number of files we process
+    .map((item) => extractFileInfo(item, category.name));
+
+  return wallpapers;
+};
+
+/**
  * Search wallpapers across all categories
  */
 export const searchWallpapers = async (

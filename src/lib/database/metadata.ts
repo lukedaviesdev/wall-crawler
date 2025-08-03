@@ -5,7 +5,7 @@ import type { DatabaseSyncMeta, DatabaseAnalytics } from '@/types/database';
 // === SYNC METADATA OPERATIONS ===
 
 /**
- * Update sync metadata
+ * Update sync metadata for a category
  */
 export const updateSyncMeta = (
   categoryName: string,
@@ -16,8 +16,10 @@ export const updateSyncMeta = (
   const database = getDatabase();
 
   const stmt = database.prepare(`
-    INSERT OR REPLACE INTO sync_meta (category_name, last_synced, sync_status, wallpaper_count, error_message)
-    VALUES (?, CURRENT_TIMESTAMP, ?, ?, ?)
+    INSERT OR REPLACE INTO sync_meta (
+      category_name, sync_status, last_synced, wallpaper_count, error_message, updated_at
+    )
+    VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?, CURRENT_TIMESTAMP)
   `);
 
   const result = stmt.run(categoryName, status, count || 0, error || null);
@@ -32,7 +34,8 @@ export const getSyncMeta = (categoryName: string): DatabaseSyncMeta | null => {
   const stmt = database.prepare(
     'SELECT * FROM sync_meta WHERE category_name = ?',
   );
-  return (stmt.get(categoryName) as DatabaseSyncMeta) || null;
+  const result = stmt.get(categoryName) as DatabaseSyncMeta | undefined;
+  return result || null;
 };
 
 /**
@@ -40,10 +43,23 @@ export const getSyncMeta = (categoryName: string): DatabaseSyncMeta | null => {
  */
 export const getAllSyncMeta = (): DatabaseSyncMeta[] => {
   const database = getDatabase();
-  const stmt = database.prepare(
-    'SELECT * FROM sync_meta ORDER BY last_synced DESC',
-  );
+  const stmt = database.prepare(`
+    SELECT * FROM sync_meta
+    ORDER BY last_synced DESC NULLS LAST
+  `);
   return stmt.all() as DatabaseSyncMeta[];
+};
+
+/**
+ * Delete sync metadata for a category
+ */
+export const deleteSyncMeta = (categoryName: string): boolean => {
+  const database = getDatabase();
+  const stmt = database.prepare(
+    'DELETE FROM sync_meta WHERE category_name = ?',
+  );
+  const result = stmt.run(categoryName);
+  return result.changes > 0;
 };
 
 // === ANALYTICS OPERATIONS ===
@@ -53,35 +69,40 @@ export const getAllSyncMeta = (): DatabaseSyncMeta[] => {
  */
 export const trackEvent = (
   eventType: string,
-  category?: string,
+  categoryName?: string,
   wallpaperId?: number,
   metadata?: Record<string, unknown>,
 ): boolean => {
   const database = getDatabase();
+
   const stmt = database.prepare(`
-    INSERT INTO analytics (event_type, category, wallpaper_id, metadata)
+    INSERT INTO analytics (event_type, wallpaper_id, category_name, metadata)
     VALUES (?, ?, ?, ?)
   `);
 
   const result = stmt.run(
     eventType,
-    category || null,
     wallpaperId || null,
+    categoryName || null,
     metadata ? JSON.stringify(metadata) : null,
   );
+
   return result.changes > 0;
 };
 
 /**
- * Get analytics data
+ * Get analytics data with optional filtering
  */
 export const getAnalytics = (
   eventType?: string,
-  category?: string,
+  categoryName?: string,
   limit?: number,
+  startDate?: string,
+  endDate?: string,
 ): DatabaseAnalytics[] => {
   const database = getDatabase();
 
+  // Build dynamic query
   let query = 'SELECT * FROM analytics WHERE 1=1';
   const parameters: unknown[] = [];
 
@@ -90,12 +111,22 @@ export const getAnalytics = (
     parameters.push(eventType);
   }
 
-  if (category) {
-    query += ' AND category = ?';
-    parameters.push(category);
+  if (categoryName) {
+    query += ' AND category_name = ?';
+    parameters.push(categoryName);
   }
 
-  query += ' ORDER BY created_at DESC';
+  if (startDate) {
+    query += ' AND timestamp >= ?';
+    parameters.push(startDate);
+  }
+
+  if (endDate) {
+    query += ' AND timestamp <= ?';
+    parameters.push(endDate);
+  }
+
+  query += ' ORDER BY timestamp DESC';
 
   if (limit) {
     query += ' LIMIT ?';
@@ -103,7 +134,58 @@ export const getAnalytics = (
   }
 
   const stmt = database.prepare(query);
-  return stmt.all(...parameters) as DatabaseAnalytics[];
+  const results = stmt.all(...parameters) as DatabaseAnalytics[];
+
+  // Parse metadata JSON
+  return results.map((event) => ({
+    ...event,
+    metadata: event.metadata ? JSON.parse(event.metadata as string) : null,
+  }));
+};
+
+/**
+ * Get analytics summary by event type
+ */
+export const getAnalyticsSummary = (
+  startDate?: string,
+  endDate?: string,
+): { eventType: string; count: number }[] => {
+  const database = getDatabase();
+
+  let query = `
+    SELECT event_type as eventType, COUNT(*) as count
+    FROM analytics
+    WHERE 1=1
+  `;
+  const parameters: unknown[] = [];
+
+  if (startDate) {
+    query += ' AND timestamp >= ?';
+    parameters.push(startDate);
+  }
+
+  if (endDate) {
+    query += ' AND timestamp <= ?';
+    parameters.push(endDate);
+  }
+
+  query += ' GROUP BY event_type ORDER BY count DESC';
+
+  const stmt = database.prepare(query);
+  return stmt.all(...parameters) as { eventType: string; count: number }[];
+};
+
+/**
+ * Delete old analytics data
+ */
+export const cleanupAnalytics = (olderThanDays: number): number => {
+  const database = getDatabase();
+  const cutoffDate = new Date();
+  cutoffDate.setDate(cutoffDate.getDate() - olderThanDays);
+
+  const stmt = database.prepare('DELETE FROM analytics WHERE timestamp < ?');
+  const result = stmt.run(cutoffDate.toISOString());
+  return result.changes;
 };
 
 // === STATISTICS OPERATIONS ===
@@ -117,37 +199,52 @@ export const getStats = (): {
   lastSync: string | null;
   totalDownloads: number;
   totalViews: number;
+  featuredWallpapers: number;
+  syncedCategories: number;
 } => {
   const database = getDatabase();
 
-  const categoriesStmt = database.prepare(
-    'SELECT COUNT(*) as count FROM categories',
-  );
-  const wallpapersStmt = database.prepare(
-    'SELECT COUNT(*) as count FROM wallpapers',
-  );
-  const lastSyncStmt = database.prepare(
-    'SELECT MAX(last_synced) as last_sync FROM sync_meta',
-  );
-  const downloadsStmt = database.prepare(
-    'SELECT SUM(download_count) as total FROM wallpapers',
-  );
-  const viewsStmt = database.prepare(
-    'SELECT SUM(view_count) as total FROM wallpapers',
-  );
+  // Get counts
+  const categoriesResult = database
+    .prepare('SELECT COUNT(*) as count FROM categories')
+    .get() as { count: number };
+  const wallpapersResult = database
+    .prepare('SELECT COUNT(*) as count FROM wallpapers')
+    .get() as { count: number };
+  const featuredResult = database
+    .prepare('SELECT COUNT(*) as count FROM wallpapers WHERE is_featured = 1')
+    .get() as { count: number };
+  const syncedResult = database
+    .prepare(
+      'SELECT COUNT(*) as count FROM sync_meta WHERE sync_status = "completed"',
+    )
+    .get() as { count: number };
 
-  const categoriesResult = categoriesStmt.get() as { count: number };
-  const wallpapersResult = wallpapersStmt.get() as { count: number };
-  const lastSyncResult = lastSyncStmt.get() as { last_sync: string | null };
-  const downloadsResult = downloadsStmt.get() as { total: number | null };
-  const viewsResult = viewsStmt.get() as { total: number | null };
+  // Get last sync
+  const lastSyncResult = database
+    .prepare('SELECT MAX(last_synced) as lastSync FROM sync_meta')
+    .get() as { lastSync: string | null };
+
+  // Get totals
+  const totalsResult = database
+    .prepare(
+      `
+    SELECT
+      COALESCE(SUM(download_count), 0) as totalDownloads,
+      COALESCE(SUM(view_count), 0) as totalViews
+    FROM wallpapers
+  `,
+    )
+    .get() as { totalDownloads: number; totalViews: number };
 
   return {
     categories: categoriesResult.count,
     wallpapers: wallpapersResult.count,
-    lastSync: lastSyncResult.last_sync,
-    totalDownloads: downloadsResult.total || 0,
-    totalViews: viewsResult.total || 0,
+    featuredWallpapers: featuredResult.count,
+    syncedCategories: syncedResult.count,
+    lastSync: lastSyncResult.lastSync,
+    totalDownloads: totalsResult.totalDownloads,
+    totalViews: totalsResult.totalViews,
   };
 };
 
@@ -157,27 +254,61 @@ export const getStats = (): {
 export const getSyncStatus = (): {
   categoryName: string;
   status: DatabaseSyncMeta['sync_status'];
-  lastSynced: string;
+  lastSynced: string | null;
   wallpaperCount: number;
   errorMessage?: string;
 }[] => {
   const database = getDatabase();
+
   const stmt = database.prepare(`
     SELECT
-      category_name,
+      category_name as categoryName,
       sync_status as status,
-      last_synced,
-      wallpaper_count,
-      error_message
+      last_synced as lastSynced,
+      wallpaper_count as wallpaperCount,
+      error_message as errorMessage
     FROM sync_meta
-    ORDER BY last_synced DESC
+    ORDER BY last_synced DESC NULLS LAST
   `);
 
   return stmt.all() as {
     categoryName: string;
     status: DatabaseSyncMeta['sync_status'];
-    lastSynced: string;
+    lastSynced: string | null;
     wallpaperCount: number;
     errorMessage?: string;
+  }[];
+};
+
+/**
+ * Get category statistics
+ */
+export const getCategoryStats = (): {
+  categoryName: string;
+  wallpaperCount: number;
+  featuredCount: number;
+  totalDownloads: number;
+  totalViews: number;
+}[] => {
+  const database = getDatabase();
+
+  const stmt = database.prepare(`
+    SELECT
+      category_name as categoryName,
+      COUNT(*) as wallpaperCount,
+      SUM(CASE WHEN is_featured = 1 THEN 1 ELSE 0 END) as featuredCount,
+      SUM(download_count) as totalDownloads,
+      SUM(view_count) as totalViews
+    FROM wallpapers
+    GROUP BY category_name
+    ORDER BY wallpaperCount DESC
+  `);
+
+  return stmt.all() as {
+    categoryName: string;
+    wallpaperCount: number;
+    featuredCount: number;
+    totalDownloads: number;
+    totalViews: number;
   }[];
 };
