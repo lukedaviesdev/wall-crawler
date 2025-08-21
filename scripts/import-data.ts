@@ -12,7 +12,9 @@ const main = async () => {
 
   if (!filePath) {
     console.error('❌ Please provide a path to the JSON file to import');
-    console.error('Usage: npx tsx scripts/import-data-simple.ts <path-to-json-file>');
+    console.error(
+      'Usage: npx tsx scripts/import-data-simple.ts <path-to-json-file>',
+    );
     process.exit(1);
   }
 
@@ -25,7 +27,7 @@ const main = async () => {
 
     if (!result.success) {
       console.error('❌ Import failed!');
-      result.errors.forEach(error => console.error(`  - ${error}`));
+      result.errors.forEach((error) => console.error(`  - ${error}`));
       process.exit(1);
     }
 
@@ -37,11 +39,12 @@ const main = async () => {
 
     if (result.errors.length > 0) {
       console.log(`\n⚠️ ${result.errors.length} warnings:`);
-      result.errors.forEach(error => console.warn(`  - ${error}`));
+      result.errors.forEach((error) => console.warn(`  - ${error}`));
     }
 
-    console.log('\n🎉 Data import complete! You can now start the backend server.');
-
+    console.log(
+      '\n🎉 Data import complete! You can now start the backend server.',
+    );
   } catch (error) {
     console.error('❌ Import failed with error:', error);
     process.exit(1);

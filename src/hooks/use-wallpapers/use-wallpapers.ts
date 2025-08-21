@@ -1,19 +1,16 @@
+import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import React from 'react';
-import { useQuery, useInfiniteQuery } from 'react-query';
 
 // Smart wallpaper service (cache-aside pattern)
 import {
   getAllWallpapers,
   searchWallpapers,
   getWallpapersPaginated,
-} from '@/lib/github-api';
-import {
   getCategories,
   getWallpapersByCategory,
   getFeaturedWallpapers,
-} from '@/lib/wallpaper-service';
-
-// GitHub API for fallback operations
+} from '@/lib/api/wallpaper-service';
+import { cacheStrategies } from '@/lib/query/cache-config';
 
 import type { WallpaperItem, WallpaperFilters } from '@/types/wallpaper';
 
@@ -38,8 +35,7 @@ export const useCategories = () => {
   return useQuery({
     queryKey: wallpaperKeys.categories(),
     queryFn: getCategories,
-    staleTime: 1000 * 60 * 30, // 30 minutes
-    cacheTime: 1000 * 60 * 60, // 1 hour
+    ...cacheStrategies.categories,
   });
 };
 
@@ -48,10 +44,9 @@ export const useCategories = () => {
  */
 export const useFeaturedWallpapers = (limit: number = 3) => {
   return useQuery({
-    queryKey: wallpaperKeys.featured(),
+    queryKey: [...wallpaperKeys.featured(), limit],
     queryFn: () => getFeaturedWallpapers(limit),
-    staleTime: 1000 * 60 * 15, // 15 minutes
-    cacheTime: 1000 * 60 * 45, // 45 minutes
+    ...cacheStrategies.featuredWallpapers,
   });
 };
 
@@ -62,8 +57,7 @@ export const useAllWallpapers = () => {
   return useQuery({
     queryKey: wallpaperKeys.wallpapers(),
     queryFn: getAllWallpapers,
-    staleTime: 1000 * 60 * 10, // 10 minutes
-    cacheTime: 1000 * 60 * 30, // 30 minutes
+    ...cacheStrategies.allWallpapers,
   });
 };
 
@@ -78,8 +72,7 @@ export const useWallpapersByCategory = (
     queryKey: wallpaperKeys.category(categorySlug),
     queryFn: () => getWallpapersByCategory(categorySlug),
     enabled: enabled && !!categorySlug,
-    staleTime: 1000 * 60 * 10, // 10 minutes
-    cacheTime: 1000 * 60 * 30, // 30 minutes
+    ...cacheStrategies.wallpapersByCategory,
   });
 };
 
@@ -91,8 +84,7 @@ export const useSearchWallpapers = (query: string, categorySlug?: string) => {
     queryKey: wallpaperKeys.search(query, categorySlug),
     queryFn: () => searchWallpapers(query, categorySlug),
     enabled: query.length >= 2, // Only search with 2+ characters
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    cacheTime: 1000 * 60 * 15, // 15 minutes
+    ...cacheStrategies.search,
   });
 };
 
@@ -104,14 +96,35 @@ export const useInfiniteWallpapers = (
   limit: number = 50,
 ) => {
   return useInfiniteQuery({
-    queryKey: wallpaperKeys.paginated(filters),
+    queryKey: [...wallpaperKeys.paginated(filters), limit],
     queryFn: ({ pageParam: pageParameter = 1 }) =>
-      getWallpapersPaginated(pageParameter, limit, filters.category),
-    getNextPageParam: (lastPage, pages) => {
+      getWallpapersPaginated(pageParameter as number, limit, filters.category),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage: any, pages) => {
       return lastPage.hasMore ? pages.length + 1 : undefined;
     },
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    cacheTime: 1000 * 60 * 15, // 15 minutes
+    ...cacheStrategies.wallpapersByCategory,
+  });
+};
+
+/**
+ * Hook for infinite scroll within a specific category (avoids rate limits)
+ */
+export const useInfiniteCategoryWallpapers = (
+  categorySlug: string,
+  limit: number = 12,
+  enabled: boolean = true,
+) => {
+  return useInfiniteQuery({
+    queryKey: [...wallpaperKeys.category(categorySlug), 'infinite', limit],
+    queryFn: ({ pageParam: pageParameter = 1 }) =>
+      getWallpapersPaginated(pageParameter as number, limit, categorySlug),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage: any, pages) => {
+      return lastPage.hasMore ? pages.length + 1 : undefined;
+    },
+    enabled: enabled && !!categorySlug,
+    ...cacheStrategies.wallpapersByCategory,
   });
 };
 
@@ -122,12 +135,11 @@ export const useWallpaper = (wallpaperId: string) => {
   return useQuery({
     queryKey: [...wallpaperKeys.wallpapers(), 'single', wallpaperId],
     queryFn: async (): Promise<WallpaperItem | undefined> => {
-      const { wallpapers } = await getAllWallpapers();
-      return wallpapers.find((w) => w.id === wallpaperId);
+      const wallpapers = await getAllWallpapers();
+      return wallpapers.find((w: WallpaperItem) => w.id === wallpaperId);
     },
     enabled: !!wallpaperId,
-    staleTime: 1000 * 60 * 15, // 15 minutes
-    cacheTime: 1000 * 60 * 30, // 30 minutes
+    ...cacheStrategies.individual,
   });
 };
 
@@ -140,17 +152,19 @@ export const useFilteredWallpapers = (filters: WallpaperFilters) => {
   const filteredData = React.useMemo(() => {
     if (!allData) return undefined;
 
-    let { wallpapers } = allData;
+    let wallpapers = allData;
 
     // Filter by category
     if (filters.category && filters.category !== 'all') {
-      wallpapers = wallpapers.filter((w) => w.category === filters.category);
+      wallpapers = wallpapers.filter(
+        (w: WallpaperItem) => w.category === filters.category,
+      );
     }
 
     // Filter by aspect ratio
     if (filters.aspectRatio && filters.aspectRatio !== 'all') {
       wallpapers = wallpapers.filter(
-        (w) => w.aspectRatio === filters.aspectRatio,
+        (w: WallpaperItem) => w.aspectRatio === filters.aspectRatio,
       );
     }
 
@@ -158,7 +172,7 @@ export const useFilteredWallpapers = (filters: WallpaperFilters) => {
     if (filters.search) {
       const searchTerm = filters.search.toLowerCase();
       wallpapers = wallpapers.filter(
-        (w) =>
+        (w: WallpaperItem) =>
           w.name.toLowerCase().includes(searchTerm) ||
           w.category.toLowerCase().includes(searchTerm),
       );
@@ -166,7 +180,7 @@ export const useFilteredWallpapers = (filters: WallpaperFilters) => {
 
     // Sort wallpapers
     if (filters.sortBy) {
-      wallpapers.sort((a, b) => {
+      wallpapers.sort((a: WallpaperItem, b: WallpaperItem) => {
         let comparison = 0;
 
         switch (filters.sortBy) {
@@ -186,10 +200,7 @@ export const useFilteredWallpapers = (filters: WallpaperFilters) => {
       });
     }
 
-    return {
-      ...allData,
-      wallpapers,
-    };
+    return wallpapers;
   }, [allData, filters]);
 
   return {

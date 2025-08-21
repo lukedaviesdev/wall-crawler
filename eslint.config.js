@@ -11,34 +11,30 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default [
+  // Global ignores
   {
-    files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
     ignores: [
-      // dependencies
       'node_modules/**',
-      // testing
       'coverage/**',
-      // production
       'dist/**',
       'build/**',
-      // misc
       '**/.DS_Store',
       '**/*.pem',
-      // debug
       'npm-debug.log*',
       'yarn-debug.log*',
       'yarn-error.log*',
-      // Generated files
       'src/routeTree.gen.ts',
-      // Config files
-      '**/.prettierrc.cjs'
+      '**/.prettierrc.cjs',
     ],
+  },
+  // TypeScript files that are in tsconfig.json (src/** files)
+  {
+    files: ['src/**/*.{ts,tsx}'],
     languageOptions: {
       globals: {
         ...globals.browser,
         React: true,
         JSX: true,
-        module: true,
       },
       parser: tseslint.parser,
       parserOptions: {
@@ -47,7 +43,38 @@ export default [
         ecmaFeatures: {
           jsx: true,
         },
-        project: ['./tsconfig.json', './tsconfig.node.json'],
+        project: './tsconfig.json',
+      },
+    },
+  },
+  // Server TypeScript files
+  {
+    files: ['server/**/*.{ts,js}'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        module: true,
+      },
+      parser: tseslint.parser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        project: './server/tsconfig.json',
+      },
+    },
+  },
+  // Config and script files (no TypeScript project checking)
+  {
+    files: ['*.{js,ts}', 'scripts/**/*.{js,ts}'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        module: true,
+      },
+      parser: tseslint.parser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
       },
     },
   },

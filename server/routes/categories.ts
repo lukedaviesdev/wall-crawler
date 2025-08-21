@@ -1,4 +1,5 @@
 import express from 'express';
+
 import {
   getCategories,
   getCategoryBySlug,
@@ -7,21 +8,60 @@ import {
   updateCategory,
   updateCategoryCount,
   getCategoriesWithCounts,
-} from '@/lib/database/categories';
+} from '@/lib/database';
+import { getCategories as fetchCategoriesFromGitHub } from '@/lib/github-api';
 
 const router = express.Router();
 
 /**
  * GET /api/categories
- * Get all categories
+ * Get all categories - fallback to GitHub API if database is empty
  */
-router.get('/', async (req, res) => {
+router.get('/', async (request, res) => {
   try {
-    const withCounts = req.query.withCounts === 'true';
+    const withCounts = request.query.withCounts === 'true';
 
-    const categories = withCounts
-      ? getCategoriesWithCounts()
-      : getCategories();
+    // First try to get from database
+    let categories = withCounts ? getCategoriesWithCounts() : getCategories();
+
+    // If database is empty, fetch from GitHub API and populate database
+    if (categories.length === 0) {
+      console.log('🔄 Database empty, fetching categories from GitHub API...');
+
+      try {
+        const githubCategories = await fetchCategoriesFromGitHub();
+        console.log(
+          `📥 Found ${githubCategories.length} categories from GitHub`,
+        );
+
+        // Save categories to database
+        for (const category of githubCategories) {
+          try {
+            createCategory({
+              slug: category.slug,
+              name: category.name,
+              path: category.path,
+              description: category.description || '',
+              wallpaper_count: category.wallpaperCount || 0,
+            });
+          } catch (databaseError) {
+            // Skip duplicates or other errors
+            console.warn(
+              `Warning: Could not save category ${category.slug}:`,
+              databaseError,
+            );
+          }
+        }
+
+        // Now get from database with updated data
+        categories = withCounts ? getCategoriesWithCounts() : getCategories();
+        console.log('✅ Categories populated in database');
+      } catch (githubError) {
+        console.error('⚠️ Failed to fetch from GitHub API:', githubError);
+        // Return empty array if GitHub API fails
+        categories = [];
+      }
+    }
 
     res.json({
       success: true,
@@ -42,9 +82,9 @@ router.get('/', async (req, res) => {
  * GET /api/categories/:slug
  * Get category by slug
  */
-router.get('/:slug', async (req, res) => {
+router.get('/:slug', async (request, res) => {
   try {
-    const { slug } = req.params;
+    const { slug } = request.params;
     const category = getCategoryBySlug(slug);
 
     if (!category) {
@@ -73,9 +113,9 @@ router.get('/:slug', async (req, res) => {
  * POST /api/categories
  * Create a new category
  */
-router.post('/', async (req, res) => {
+router.post('/', async (request, res) => {
   try {
-    const { slug, name, path, description, wallpaper_count } = req.body;
+    const { slug, name, path, description, wallpaper_count } = request.body;
 
     // Validation
     if (!slug || !name || !path) {
@@ -105,7 +145,10 @@ router.post('/', async (req, res) => {
     console.error('Error creating category:', error);
 
     // Handle duplicate slug error
-    if (error instanceof Error && error.message.includes('UNIQUE constraint failed')) {
+    if (
+      error instanceof Error &&
+      error.message.includes('UNIQUE constraint failed')
+    ) {
       return res.status(409).json({
         success: false,
         error: 'Category already exists',
@@ -125,9 +168,9 @@ router.post('/', async (req, res) => {
  * PUT /api/categories/:id
  * Update a category
  */
-router.put('/:id', async (req, res) => {
+router.put('/:id', async (request, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = parseInt(request.params.id, 10);
     if (isNaN(id)) {
       return res.status(400).json({
         success: false,
@@ -136,7 +179,7 @@ router.put('/:id', async (req, res) => {
       });
     }
 
-    const updates = req.body;
+    const updates = request.body;
     const success = updateCategory(id, updates);
 
     if (!success) {
@@ -168,10 +211,10 @@ router.put('/:id', async (req, res) => {
  * PUT /api/categories/:id/count
  * Update category wallpaper count
  */
-router.put('/:id/count', async (req, res) => {
+router.put('/:id/count', async (request, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
-    const { count } = req.body;
+    const id = parseInt(request.params.id, 10);
+    const { count } = request.body;
 
     if (isNaN(id)) {
       return res.status(400).json({

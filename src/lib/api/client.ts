@@ -1,4 +1,6 @@
 // API client for communicating with the backend server
+import { logError } from '@/lib/utils/error-handling';
+
 export interface ApiResponse<T = any> {
   success: boolean;
   data?: T;
@@ -14,7 +16,8 @@ export interface ApiError {
 }
 
 // Configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 /**
  * Generic API request handler
@@ -37,7 +40,15 @@ const apiRequest = async <T>(
     const data = await response.json();
 
     if (!response.ok) {
-      console.error(`API Error ${response.status}:`, data);
+      logError(
+        `API Request ${response.status}`,
+        data.error || 'Request failed',
+        {
+          url,
+          status: response.status,
+          data,
+        },
+      );
       return {
         success: false,
         error: data.error || 'Request failed',
@@ -47,11 +58,12 @@ const apiRequest = async <T>(
 
     return data;
   } catch (error) {
-    console.error('API Request failed:', error);
+    logError('API Network Error', error, { url });
     return {
       success: false,
       error: 'Network error',
-      message: error instanceof Error ? error.message : 'Failed to connect to server',
+      message:
+        error instanceof Error ? error.message : 'Failed to connect to server',
     };
   }
 };
@@ -65,8 +77,7 @@ export const apiClient = {
     getAll: (withCounts = false) =>
       apiRequest(`/categories${withCounts ? '?withCounts=true' : ''}`),
 
-    getBySlug: (slug: string) =>
-      apiRequest(`/categories/${slug}`),
+    getBySlug: (slug: string) => apiRequest(`/categories/${slug}`),
 
     create: (data: any) =>
       apiRequest('/categories', {
@@ -90,13 +101,13 @@ export const apiClient = {
   // Wallpapers
   wallpapers: {
     getAll: (filters: any = {}) => {
-      const params = new URLSearchParams();
+      const parameters = new URLSearchParams();
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
-          params.append(key, String(value));
+          parameters.append(key, String(value));
         }
       });
-      const query = params.toString() ? `?${params.toString()}` : '';
+      const query = parameters.toString() ? `?${parameters.toString()}` : '';
       return apiRequest(`/wallpapers${query}`);
     },
 
@@ -110,8 +121,7 @@ export const apiClient = {
       return apiRequest(`/wallpapers/category/${categoryId}${query}`);
     },
 
-    getById: (id: number) =>
-      apiRequest(`/wallpapers/${id}`),
+    getById: (id: number) => apiRequest(`/wallpapers/${id}`),
 
     create: (data: any) =>
       apiRequest('/wallpapers', {
@@ -144,16 +154,14 @@ export const apiClient = {
 
   // Sync operations
   sync: {
-    getStatus: () =>
-      apiRequest('/sync/status'),
+    getStatus: () => apiRequest('/sync/status'),
 
     syncCategories: () =>
       apiRequest('/sync/categories', {
         method: 'POST',
       }),
 
-    getMeta: () =>
-      apiRequest('/sync/meta'),
+    getMeta: () => apiRequest('/sync/meta'),
 
     getMetaByCategory: (categoryName: string) =>
       apiRequest(`/sync/meta/${categoryName}`),
@@ -185,25 +193,24 @@ export const apiClient = {
 
   // Analytics
   analytics: {
-    getStats: () =>
-      apiRequest('/analytics/stats'),
+    getStats: () => apiRequest('/analytics/stats'),
 
     getEvents: (filters: any = {}) => {
-      const params = new URLSearchParams();
+      const parameters = new URLSearchParams();
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
-          params.append(key, String(value));
+          parameters.append(key, String(value));
         }
       });
-      const query = params.toString() ? `?${params.toString()}` : '';
+      const query = parameters.toString() ? `?${parameters.toString()}` : '';
       return apiRequest(`/analytics/events${query}`);
     },
 
     getSummary: (startDate?: string, endDate?: string) => {
-      const params = new URLSearchParams();
-      if (startDate) params.append('startDate', startDate);
-      if (endDate) params.append('endDate', endDate);
-      const query = params.toString() ? `?${params.toString()}` : '';
+      const parameters = new URLSearchParams();
+      if (startDate) parameters.append('startDate', startDate);
+      if (endDate) parameters.append('endDate', endDate);
+      const query = parameters.toString() ? `?${parameters.toString()}` : '';
       return apiRequest(`/analytics/summary${query}`);
     },
 

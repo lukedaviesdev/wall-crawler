@@ -1,10 +1,12 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { Toaster } from 'sonner';
 
 import './index.css';
+import { ErrorBoundary } from './components/error/error-boundary';
+import { cacheConfig } from './lib/query/cache-config';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 
@@ -20,15 +22,19 @@ declare module '@tanstack/react-router' {
   }
 }
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: cacheConfig.defaults,
+});
 
 const App = () => {
   return (
     <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <Toaster />
-      </QueryClientProvider>
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <Toaster />
+        </QueryClientProvider>
+      </ErrorBoundary>
     </StrictMode>
   );
 };

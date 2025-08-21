@@ -5,8 +5,11 @@ export { getDb, closeDb } from './connection';
 export {
   getCategories,
   getCategoryBySlug,
+  getCategoryById,
   createCategory,
+  updateCategory,
   updateCategoryCount,
+  getCategoriesWithCounts,
 } from './categories';
 
 // Wallpaper operations
@@ -16,6 +19,8 @@ export {
   getWallpapersByCategory,
   getFeaturedWallpapers,
   createWallpaper,
+  createMultipleWallpapers,
+  updateWallpaper,
   incrementDownloadCount,
   incrementViewCount,
 } from './wallpapers';
@@ -27,6 +32,9 @@ export {
   getAllSyncMeta,
   trackEvent,
   getAnalytics,
+  getAnalyticsSummary,
+  cleanupAnalytics,
+  getCategoryStats,
   getStats,
   getSyncStatus,
 } from './metadata';
@@ -36,5 +44,8 @@ export {
   syncCategories,
   getSyncStatus as getSyncOperationStatus,
 } from './sync';
+
+// Import operations
+export { importFromFile, importFromJson, clearDatabase } from './import';
 
 // Debug utilities are available separately in ./debug.ts (browser only)

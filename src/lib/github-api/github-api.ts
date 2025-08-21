@@ -218,6 +218,48 @@ export const getWallpapersByCategoryLimited = async (
 };
 
 /**
+ * Get wallpapers from a category with pagination (avoids rate limits)
+ */
+export const getWallpapersByCategoryPaginated = async (
+  categorySlug: string,
+  page: number = 1,
+  limit: number = 12,
+): Promise<{
+  wallpapers: WallpaperItem[];
+  hasMore: boolean;
+  total: number;
+  page: number;
+}> => {
+  // Find the actual category path (case-sensitive)
+  const categories = await getCategories();
+  const category = categories.find((cat) => cat.slug === categorySlug);
+
+  if (!category) {
+    throw new GitHubApiError(`Category "${categorySlug}" not found`, 404, '');
+  }
+
+  const contents = await fetchDirectoryContents(`/${category.path}`);
+  const allFiles = contents.filter(
+    (item) => item.type === 'file' && isImageFile(item.name),
+  );
+
+  const startIndex = (page - 1) * limit;
+  const endIndex = startIndex + limit;
+  const pagedFiles = allFiles.slice(startIndex, endIndex);
+
+  const wallpapers = pagedFiles.map((item) =>
+    extractFileInfo(item, category.name),
+  );
+
+  return {
+    wallpapers,
+    hasMore: endIndex < allFiles.length,
+    total: allFiles.length,
+    page,
+  };
+};
+
+/**
  * Search wallpapers across all categories
  */
 export const searchWallpapers = async (

@@ -1,0 +1,5593 @@
+{
+  "metadata": {
+    "version": 1,
+    "root": "/Users/lukedavies/Dev/wall-crawler",
+    "createdAt": "2025-08-21T13:28:15.821Z",
+    "updatedAt": "2025-08-21T13:28:15.821Z",
+    "totalFiles": 106
+  },
+  "tree": {
+    "name": "wall-crawler",
+    "type": "dir",
+    "children": [
+      {
+        "name": "scripts",
+        "type": "dir",
+        "children": [
+          {
+            "name": "import-data.ts",
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "name": "server",
+        "type": "dir",
+        "children": [
+          {
+            "name": "routes",
+            "type": "dir",
+            "children": [
+              {
+                "name": "analytics.ts",
+                "type": "file"
+              },
+              {
+                "name": "categories.ts",
+                "type": "file"
+              },
+              {
+                "name": "sync.ts",
+                "type": "file"
+              },
+              {
+                "name": "wallpapers.ts",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "config.ts",
+            "type": "file"
+          },
+          {
+            "name": "index.ts",
+            "type": "file"
+          },
+          {
+            "name": "test-minimal.ts",
+            "type": "file"
+          },
+          {
+            "name": "test-step-by-step.ts",
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "name": "src",
+        "type": "dir",
+        "children": [
+          {
+            "name": "assets",
+            "type": "dir",
+            "children": [
+              {
+                "name": "readme.ts",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "components",
+            "type": "dir",
+            "children": [
+              {
+                "name": "back-to-top",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "back-to-top.test.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "back-to-top.tsx",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "card",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "form-card.tsx",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "forms",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "buttons",
+                    "type": "dir",
+                    "children": [
+                      {
+                        "name": "secondary-button.tsx",
+                        "type": "file"
+                      },
+                      {
+                        "name": "submit-button.tsx",
+                        "type": "file"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "form-fields",
+                    "type": "dir",
+                    "children": [
+                      {
+                        "name": "text-input.tsx",
+                        "type": "file"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "login",
+                    "type": "dir",
+                    "children": [
+                      {
+                        "name": "login-form.tsx",
+                        "type": "file"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "loading",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "index.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "loading-spinner.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "sync-status.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "wallpaper-skeleton.tsx",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "markdown",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "markdown.tsx",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "motion",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "motion.tsx",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "repo-data",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "repo-data.tsx",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "ui",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "badge.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "button.test.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "button.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "card.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "dialog.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "form.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "input.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "label.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "progress.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "select.tsx",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "wallpaper-card",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "card-footer.local.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "category-badge.local.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "hover-actions.local.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "image-container.local.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "index.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "progress-overlay.local.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "status-badge.local.tsx",
+                    "type": "file"
+                  },
+                  {
+                    "name": "types.local.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "wallpaper-card.tsx",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "wallpaper-grid",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "index.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "wallpaper-grid.tsx",
+                    "type": "file"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "hooks",
+            "type": "dir",
+            "children": [
+              {
+                "name": "use-debounce",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "use-debounce.test.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "use-debounce.ts",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "use-downloads",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "index.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "use-downloads.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "utils.ts",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "use-event-listener",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "use-event-listener.test.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "use-event-listener.ts",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "use-intersection",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "use-intersection.test.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "use-intersection.ts",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "use-local-storage",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "use-local-storage.test.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "use-local-storage.ts",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "use-media-query",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "use-media-query.test.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "use-media-query.ts",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "use-previous",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "use-previous.test.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "use-previous.ts",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "use-wallpapers",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "index.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "use-wallpapers.ts",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "index.ts",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "layout",
+            "type": "dir",
+            "children": [
+              {
+                "name": "default-layout.tsx",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "lib",
+            "type": "dir",
+            "children": [
+              {
+                "name": "api",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "client.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "index.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "wallpaper-service.ts",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "database",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "categories.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "connection.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "debug.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "import.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "index.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "metadata.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "sync.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "wallpapers.ts",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "github-api",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "github-api.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "index.ts",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "wallpaper-service",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "index.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "wallpaper-service.ts",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "utils.ts",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "pages",
+            "type": "dir",
+            "children": [
+              {
+                "name": "gallery.tsx",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "routes",
+            "type": "dir",
+            "children": [
+              {
+                "name": "__root.tsx",
+                "type": "file"
+              },
+              {
+                "name": "index.tsx",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "test",
+            "type": "dir",
+            "children": [
+              {
+                "name": "setup.ts",
+                "type": "file"
+              },
+              {
+                "name": "test-utils.tsx",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "types",
+            "type": "dir",
+            "children": [
+              {
+                "name": "database.ts",
+                "type": "file"
+              },
+              {
+                "name": "download.ts",
+                "type": "file"
+              },
+              {
+                "name": "github.ts",
+                "type": "file"
+              },
+              {
+                "name": "wallpaper.ts",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "utils",
+            "type": "dir",
+            "children": [
+              {
+                "name": "array",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "array.test.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "array.ts",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "date",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "date.test.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "date.ts",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "object",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "object.test.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "object.ts",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "storage",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "storage.test.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "storage.ts",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
+                "name": "string",
+                "type": "dir",
+                "children": [
+                  {
+                    "name": "string.test.ts",
+                    "type": "file"
+                  },
+                  {
+                    "name": "string.ts",
+                    "type": "file"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "main.tsx",
+            "type": "file"
+          },
+          {
+            "name": "routeTree.gen.ts",
+            "type": "file"
+          },
+          {
+            "name": "vite-env.d.ts",
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "name": "eslint.config.js",
+        "type": "file"
+      },
+      {
+        "name": "plopfile.js",
+        "type": "file"
+      },
+      {
+        "name": "tailwind.config.js",
+        "type": "file"
+      },
+      {
+        "name": "vite.config.ts",
+        "type": "file"
+      }
+    ]
+  },
+  "nodes": [
+    "eslint.config.js",
+    "plopfile.js",
+    "scripts/import-data.ts",
+    "server/config.ts",
+    "server/index.ts",
+    "server/routes/analytics.ts",
+    "server/routes/categories.ts",
+    "server/routes/sync.ts",
+    "server/routes/wallpapers.ts",
+    "server/test-minimal.ts",
+    "server/test-step-by-step.ts",
+    "src/assets/readme.ts",
+    "src/components/back-to-top/back-to-top.test.tsx",
+    "src/components/back-to-top/back-to-top.tsx",
+    "src/components/card/form-card.tsx",
+    "src/components/forms/buttons/secondary-button.tsx",
+    "src/components/forms/buttons/submit-button.tsx",
+    "src/components/forms/form-fields/text-input.tsx",
+    "src/components/forms/login/login-form.tsx",
+    "src/components/loading/index.ts",
+    "src/components/loading/loading-spinner.tsx",
+    "src/components/loading/sync-status.tsx",
+    "src/components/loading/wallpaper-skeleton.tsx",
+    "src/components/markdown/markdown.tsx",
+    "src/components/motion/motion.tsx",
+    "src/components/repo-data/repo-data.tsx",
+    "src/components/ui/badge.tsx",
+    "src/components/ui/button.test.tsx",
+    "src/components/ui/button.tsx",
+    "src/components/ui/card.tsx",
+    "src/components/ui/dialog.tsx",
+    "src/components/ui/form.tsx",
+    "src/components/ui/input.tsx",
+    "src/components/ui/label.tsx",
+    "src/components/ui/progress.tsx",
+    "src/components/ui/select.tsx",
+    "src/components/wallpaper-card/card-footer.local.tsx",
+    "src/components/wallpaper-card/category-badge.local.tsx",
+    "src/components/wallpaper-card/hover-actions.local.tsx",
+    "src/components/wallpaper-card/image-container.local.tsx",
+    "src/components/wallpaper-card/index.ts",
+    "src/components/wallpaper-card/progress-overlay.local.tsx",
+    "src/components/wallpaper-card/status-badge.local.tsx",
+    "src/components/wallpaper-card/types.local.ts",
+    "src/components/wallpaper-card/wallpaper-card.tsx",
+    "src/components/wallpaper-grid/index.ts",
+    "src/components/wallpaper-grid/wallpaper-grid.tsx",
+    "src/hooks/index.ts",
+    "src/hooks/use-debounce/use-debounce.test.ts",
+    "src/hooks/use-debounce/use-debounce.ts",
+    "src/hooks/use-downloads/index.ts",
+    "src/hooks/use-downloads/use-downloads.ts",
+    "src/hooks/use-downloads/utils.ts",
+    "src/hooks/use-event-listener/use-event-listener.test.ts",
+    "src/hooks/use-event-listener/use-event-listener.ts",
+    "src/hooks/use-intersection/use-intersection.test.ts",
+    "src/hooks/use-intersection/use-intersection.ts",
+    "src/hooks/use-local-storage/use-local-storage.test.ts",
+    "src/hooks/use-local-storage/use-local-storage.ts",
+    "src/hooks/use-media-query/use-media-query.test.ts",
+    "src/hooks/use-media-query/use-media-query.ts",
+    "src/hooks/use-previous/use-previous.test.ts",
+    "src/hooks/use-previous/use-previous.ts",
+    "src/hooks/use-wallpapers/index.ts",
+    "src/hooks/use-wallpapers/use-wallpapers.ts",
+    "src/layout/default-layout.tsx",
+    "src/lib/api/client.ts",
+    "src/lib/api/index.ts",
+    "src/lib/api/wallpaper-service.ts",
+    "src/lib/database/categories.ts",
+    "src/lib/database/connection.ts",
+    "src/lib/database/debug.ts",
+    "src/lib/database/import.ts",
+    "src/lib/database/index.ts",
+    "src/lib/database/metadata.ts",
+    "src/lib/database/sync.ts",
+    "src/lib/database/wallpapers.ts",
+    "src/lib/github-api/github-api.ts",
+    "src/lib/github-api/index.ts",
+    "src/lib/utils.ts",
+    "src/lib/wallpaper-service/index.ts",
+    "src/lib/wallpaper-service/wallpaper-service.ts",
+    "src/main.tsx",
+    "src/pages/gallery.tsx",
+    "src/routeTree.gen.ts",
+    "src/routes/__root.tsx",
+    "src/routes/index.tsx",
+    "src/test/setup.ts",
+    "src/test/test-utils.tsx",
+    "src/types/database.ts",
+    "src/types/download.ts",
+    "src/types/github.ts",
+    "src/types/wallpaper.ts",
+    "src/utils/array/array.test.ts",
+    "src/utils/array/array.ts",
+    "src/utils/date/date.test.ts",
+    "src/utils/date/date.ts",
+    "src/utils/object/object.test.ts",
+    "src/utils/object/object.ts",
+    "src/utils/storage/storage.test.ts",
+    "src/utils/storage/storage.ts",
+    "src/utils/string/string.test.ts",
+    "src/utils/string/string.ts",
+    "src/vite-env.d.ts",
+    "tailwind.config.js",
+    "vite.config.ts"
+  ],
+  "edges": [
+    {
+      "from": "scripts/import-data.ts",
+      "to": "src/lib/database/import.ts"
+    },
+    {
+      "from": "server/index.ts",
+      "to": "server/routes/analytics.ts"
+    },
+    {
+      "from": "server/index.ts",
+      "to": "server/routes/categories.ts"
+    },
+    {
+      "from": "server/index.ts",
+      "to": "server/routes/sync.ts"
+    },
+    {
+      "from": "server/index.ts",
+      "to": "server/routes/wallpapers.ts"
+    },
+    {
+      "from": "src/components/back-to-top/back-to-top.test.tsx",
+      "to": "src/components/back-to-top/back-to-top.tsx"
+    },
+    {
+      "from": "src/components/loading/index.ts",
+      "to": "src/components/loading/loading-spinner.tsx"
+    },
+    {
+      "from": "src/components/loading/index.ts",
+      "to": "src/components/loading/sync-status.tsx"
+    },
+    {
+      "from": "src/components/loading/index.ts",
+      "to": "src/components/loading/wallpaper-skeleton.tsx"
+    },
+    {
+      "from": "src/components/ui/button.test.tsx",
+      "to": "src/components/ui/button.tsx"
+    },
+    {
+      "from": "src/components/wallpaper-card/index.ts",
+      "to": "src/components/wallpaper-card/wallpaper-card.tsx"
+    },
+    {
+      "from": "src/components/wallpaper-grid/index.ts",
+      "to": "src/components/wallpaper-card/index.ts"
+    },
+    {
+      "from": "src/components/wallpaper-grid/index.ts",
+      "to": "src/components/wallpaper-grid/wallpaper-grid.tsx"
+    },
+    {
+      "from": "src/hooks/index.ts",
+      "to": "src/hooks/use-debounce/use-debounce.ts"
+    },
+    {
+      "from": "src/hooks/index.ts",
+      "to": "src/hooks/use-downloads/index.ts"
+    },
+    {
+      "from": "src/hooks/index.ts",
+      "to": "src/hooks/use-event-listener/use-event-listener.ts"
+    },
+    {
+      "from": "src/hooks/index.ts",
+      "to": "src/hooks/use-intersection/use-intersection.ts"
+    },
+    {
+      "from": "src/hooks/index.ts",
+      "to": "src/hooks/use-local-storage/use-local-storage.ts"
+    },
+    {
+      "from": "src/hooks/index.ts",
+      "to": "src/hooks/use-media-query/use-media-query.ts"
+    },
+    {
+      "from": "src/hooks/index.ts",
+      "to": "src/hooks/use-previous/use-previous.ts"
+    },
+    {
+      "from": "src/hooks/index.ts",
+      "to": "src/hooks/use-wallpapers/index.ts"
+    },
+    {
+      "from": "src/hooks/use-debounce/use-debounce.test.ts",
+      "to": "src/hooks/use-debounce/use-debounce.ts"
+    },
+    {
+      "from": "src/hooks/use-downloads/index.ts",
+      "to": "src/hooks/use-downloads/use-downloads.ts"
+    },
+    {
+      "from": "src/hooks/use-downloads/index.ts",
+      "to": "src/hooks/use-downloads/utils.ts"
+    },
+    {
+      "from": "src/hooks/use-event-listener/use-event-listener.test.ts",
+      "to": "src/hooks/use-event-listener/use-event-listener.ts"
+    },
+    {
+      "from": "src/hooks/use-intersection/use-intersection.test.ts",
+      "to": "src/hooks/use-intersection/use-intersection.ts"
+    },
+    {
+      "from": "src/hooks/use-local-storage/use-local-storage.test.ts",
+      "to": "src/hooks/use-local-storage/use-local-storage.ts"
+    },
+    {
+      "from": "src/hooks/use-media-query/use-media-query.test.ts",
+      "to": "src/hooks/use-media-query/use-media-query.ts"
+    },
+    {
+      "from": "src/hooks/use-previous/use-previous.test.ts",
+      "to": "src/hooks/use-previous/use-previous.ts"
+    },
+    {
+      "from": "src/hooks/use-wallpapers/index.ts",
+      "to": "src/hooks/use-wallpapers/use-wallpapers.ts"
+    },
+    {
+      "from": "src/lib/api/index.ts",
+      "to": "src/lib/api/client.ts"
+    },
+    {
+      "from": "src/lib/api/index.ts",
+      "to": "src/lib/api/wallpaper-service.ts"
+    },
+    {
+      "from": "src/lib/api/wallpaper-service.ts",
+      "to": "src/lib/api/client.ts"
+    },
+    {
+      "from": "src/lib/database/categories.ts",
+      "to": "src/lib/database/connection.ts"
+    },
+    {
+      "from": "src/lib/database/debug.ts",
+      "to": "src/lib/database/connection.ts"
+    },
+    {
+      "from": "src/lib/database/import.ts",
+      "to": "src/lib/database/categories.ts"
+    },
+    {
+      "from": "src/lib/database/import.ts",
+      "to": "src/lib/database/connection.ts"
+    },
+    {
+      "from": "src/lib/database/import.ts",
+      "to": "src/lib/database/metadata.ts"
+    },
+    {
+      "from": "src/lib/database/import.ts",
+      "to": "src/lib/database/wallpapers.ts"
+    },
+    {
+      "from": "src/lib/database/index.ts",
+      "to": "src/lib/database/categories.ts"
+    },
+    {
+      "from": "src/lib/database/index.ts",
+      "to": "src/lib/database/connection.ts"
+    },
+    {
+      "from": "src/lib/database/index.ts",
+      "to": "src/lib/database/metadata.ts"
+    },
+    {
+      "from": "src/lib/database/index.ts",
+      "to": "src/lib/database/sync.ts"
+    },
+    {
+      "from": "src/lib/database/index.ts",
+      "to": "src/lib/database/wallpapers.ts"
+    },
+    {
+      "from": "src/lib/database/metadata.ts",
+      "to": "src/lib/database/connection.ts"
+    },
+    {
+      "from": "src/lib/database/wallpapers.ts",
+      "to": "src/lib/database/connection.ts"
+    },
+    {
+      "from": "src/lib/github-api/index.ts",
+      "to": "src/lib/github-api/github-api.ts"
+    },
+    {
+      "from": "src/lib/wallpaper-service/index.ts",
+      "to": "src/lib/wallpaper-service/wallpaper-service.ts"
+    },
+    {
+      "from": "src/routeTree.gen.ts",
+      "to": "src/routes/__root.tsx"
+    },
+    {
+      "from": "src/routeTree.gen.ts",
+      "to": "src/routes/index.tsx"
+    },
+    {
+      "from": "src/routes/index.tsx",
+      "to": "src/pages/gallery.tsx"
+    },
+    {
+      "from": "src/types/download.ts",
+      "to": "src/types/wallpaper.ts"
+    },
+    {
+      "from": "src/utils/array/array.test.ts",
+      "to": "src/utils/array/array.ts"
+    },
+    {
+      "from": "src/utils/date/date.test.ts",
+      "to": "src/utils/date/date.ts"
+    },
+    {
+      "from": "src/utils/object/object.test.ts",
+      "to": "src/utils/object/object.ts"
+    },
+    {
+      "from": "src/utils/storage/storage.test.ts",
+      "to": "src/utils/storage/storage.ts"
+    },
+    {
+      "from": "src/utils/string/string.test.ts",
+      "to": "src/utils/string/string.ts"
+    }
+  ],
+  "files": {
+    "eslint.config.js": {
+      "imports": [
+        {
+          "from": "@eslint/js",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "eslint-config-prettier",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "eslint-plugin-import",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "eslint-plugin-jsx-a11y",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "eslint-plugin-prettier",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "eslint-plugin-react",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "eslint-plugin-react-hooks",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "eslint-plugin-sonarjs",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "eslint-plugin-unicorn",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "globals",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "typescript-eslint",
+          "kind": "import",
+          "isDefault": true
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "plopfile.js": {
+      "imports": [],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "scripts/import-data.ts": {
+      "imports": [
+        {
+          "from": "../src/lib/database/import.js",
+          "kind": "import",
+          "imported": [
+            "importFromFile"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/lib/database/import.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "main",
+          "initKind": "function",
+          "isExported": false
+        }
+      ]
+    },
+    "server/config.ts": {
+      "imports": [],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "config",
+          "initKind": "unknown",
+          "isExported": true
+        }
+      ]
+    },
+    "server/index.ts": {
+      "imports": [
+        {
+          "from": "express",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "cors",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "dotenv",
+          "kind": "import",
+          "imported": [
+            "config"
+          ]
+        },
+        {
+          "from": "./routes/categories",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "./routes/wallpapers",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "./routes/sync",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "./routes/analytics",
+          "kind": "import",
+          "isDefault": true
+        }
+      ],
+      "dependencies": [
+        "server/routes/analytics.ts",
+        "server/routes/categories.ts",
+        "server/routes/sync.ts",
+        "server/routes/wallpapers.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "app",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "PORT",
+          "initKind": "unknown",
+          "isExported": false
+        }
+      ]
+    },
+    "server/routes/analytics.ts": {
+      "imports": [
+        {
+          "from": "express",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "@/lib/database/metadata",
+          "kind": "import",
+          "imported": [
+            "trackEvent",
+            "getAnalytics",
+            "getAnalyticsSummary",
+            "cleanupAnalytics",
+            "getStats",
+            "getCategoryStats"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "router",
+          "initKind": "unknown",
+          "isExported": false
+        }
+      ]
+    },
+    "server/routes/categories.ts": {
+      "imports": [
+        {
+          "from": "express",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "@/lib/database/categories",
+          "kind": "import",
+          "imported": [
+            "getCategories",
+            "getCategoryBySlug",
+            "getCategoryById",
+            "createCategory",
+            "updateCategory",
+            "updateCategoryCount",
+            "getCategoriesWithCounts"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "router",
+          "initKind": "unknown",
+          "isExported": false
+        }
+      ]
+    },
+    "server/routes/sync.ts": {
+      "imports": [
+        {
+          "from": "express",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "@/lib/database/sync",
+          "kind": "import",
+          "imported": [
+            "syncCategories",
+            "getSyncOperationStatus"
+          ]
+        },
+        {
+          "from": "@/lib/database/metadata",
+          "kind": "import",
+          "imported": [
+            "updateSyncMeta",
+            "getSyncMeta",
+            "getAllSyncMeta",
+            "getSyncStatus",
+            "getStats"
+          ]
+        },
+        {
+          "from": "@/lib/database/import",
+          "kind": "import",
+          "imported": [
+            "importFromJson",
+            "importFromFile",
+            "clearDatabase"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "router",
+          "initKind": "unknown",
+          "isExported": false
+        }
+      ]
+    },
+    "server/routes/wallpapers.ts": {
+      "imports": [
+        {
+          "from": "express",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "@/lib/database/wallpapers",
+          "kind": "import",
+          "imported": [
+            "getWallpapers",
+            "getWallpaperById",
+            "getWallpapersByCategory",
+            "getFeaturedWallpapers",
+            "createWallpaper",
+            "createMultipleWallpapers",
+            "updateWallpaper",
+            "incrementDownloadCount",
+            "incrementViewCount"
+          ]
+        },
+        {
+          "from": "@/lib/database/categories",
+          "kind": "import",
+          "imported": [
+            "getCategoryById",
+            "getCategoryBySlug"
+          ]
+        },
+        {
+          "from": "@/lib/github-api",
+          "kind": "import",
+          "imported": [
+            "fetchWallpapersFromGitHub",
+            "fetchFeaturedFromGitHub"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "router",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "convertWallpaperItemToDatabase",
+          "initKind": "function",
+          "isExported": false
+        }
+      ]
+    },
+    "server/test-minimal.ts": {
+      "imports": [],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "server/test-step-by-step.ts": {
+      "imports": [],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/assets/readme.ts": {
+      "imports": [
+        {
+          "from": "../../README.md?raw",
+          "kind": "import",
+          "isDefault": true
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "processMarkdown",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "readme",
+          "initKind": "unknown",
+          "isExported": true
+        }
+      ]
+    },
+    "src/components/back-to-top/back-to-top.test.tsx": {
+      "imports": [
+        {
+          "from": "@testing-library/react",
+          "kind": "import",
+          "imported": [
+            "render",
+            "screen",
+            "act",
+            "waitFor"
+          ]
+        },
+        {
+          "from": "vitest",
+          "kind": "import",
+          "imported": [
+            "describe",
+            "it",
+            "expect",
+            "vi",
+            "beforeEach"
+          ]
+        },
+        {
+          "from": "./back-to-top",
+          "kind": "import",
+          "imported": [
+            "BackToTop"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/components/back-to-top/back-to-top.tsx"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/components/back-to-top/back-to-top.tsx": {
+      "imports": [
+        {
+          "from": "framer-motion",
+          "kind": "import",
+          "imported": [
+            "motion",
+            "AnimatePresence"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "imported": [
+            "useState"
+          ]
+        },
+        {
+          "from": "@/hooks/use-event-listener/use-event-listener",
+          "kind": "import",
+          "imported": [
+            "useEventListener"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "BackToTop",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/components/card/form-card.tsx": {
+      "imports": [
+        {
+          "from": "react",
+          "kind": "import",
+          "isNamespace": true
+        },
+        {
+          "from": "@/components/ui/card",
+          "kind": "import",
+          "imported": [
+            "Card",
+            "CardContent",
+            "CardDescription",
+            "CardHeader",
+            "CardTitle"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "FormCard",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/components/forms/buttons/secondary-button.tsx": {
+      "imports": [
+        {
+          "from": "@/components/ui/button",
+          "kind": "import",
+          "imported": [
+            "Button"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "SecondaryButton",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/components/forms/buttons/submit-button.tsx": {
+      "imports": [
+        {
+          "from": "@/components/ui/button",
+          "kind": "import",
+          "imported": [
+            "Button"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "SubmitButton",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/components/forms/form-fields/text-input.tsx": {
+      "imports": [
+        {
+          "from": "@/components/ui/form",
+          "kind": "import",
+          "imported": [
+            "FormField",
+            "FormItem",
+            "FormLabel",
+            "FormControl",
+            "FormMessage"
+          ]
+        },
+        {
+          "from": "@/components/ui/input",
+          "kind": "import",
+          "imported": [
+            "Input"
+          ]
+        },
+        {
+          "from": "react-hook-form",
+          "kind": "import",
+          "imported": [
+            "UseFormReturn",
+            "Path"
+          ]
+        },
+        {
+          "from": "zod",
+          "kind": "import",
+          "imported": [
+            "z"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "TextInput",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/components/forms/login/login-form.tsx": {
+      "imports": [
+        {
+          "from": "@hookform/resolvers/zod",
+          "kind": "import",
+          "imported": [
+            "zodResolver"
+          ]
+        },
+        {
+          "from": "react-hook-form",
+          "kind": "import",
+          "imported": [
+            "useForm"
+          ]
+        },
+        {
+          "from": "sonner",
+          "kind": "import",
+          "imported": [
+            "toast"
+          ]
+        },
+        {
+          "from": "zod",
+          "kind": "import",
+          "imported": [
+            "z"
+          ]
+        },
+        {
+          "from": "@/components/card/form-card",
+          "kind": "import",
+          "imported": [
+            "FormCard"
+          ]
+        },
+        {
+          "from": "@/components/forms/buttons/secondary-button",
+          "kind": "import",
+          "imported": [
+            "SecondaryButton"
+          ]
+        },
+        {
+          "from": "@/components/forms/buttons/submit-button",
+          "kind": "import",
+          "imported": [
+            "SubmitButton"
+          ]
+        },
+        {
+          "from": "@/components/forms/form-fields/text-input",
+          "kind": "import",
+          "imported": [
+            "TextInput"
+          ]
+        },
+        {
+          "from": "@/components/ui/form",
+          "kind": "import",
+          "imported": [
+            "Form"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "formSchema",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "LoginForm",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/components/loading/index.ts": {
+      "imports": [
+        {
+          "from": "./loading-spinner",
+          "kind": "export",
+          "imported": [
+            "LoadingSpinner",
+            "LoadingSpinnerProperties"
+          ]
+        },
+        {
+          "from": "./wallpaper-skeleton",
+          "kind": "export",
+          "imported": [
+            "WallpaperCardSkeleton",
+            "WallpaperGridSkeleton",
+            "LoadingState"
+          ]
+        },
+        {
+          "from": "./sync-status",
+          "kind": "export",
+          "imported": [
+            "SyncStatusIndicator",
+            "DataFetchStatus",
+            "ProgressIndicator",
+            "SyncStatus"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/components/loading/loading-spinner.tsx",
+        "src/components/loading/sync-status.tsx",
+        "src/components/loading/wallpaper-skeleton.tsx"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/components/loading/loading-spinner.tsx": {
+      "imports": [
+        {
+          "from": "class-variance-authority",
+          "kind": "import",
+          "imported": [
+            "cva",
+            "VariantProps"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "spinnerVariants",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "LoadingSpinner",
+          "initKind": "function",
+          "isExported": true,
+          "type": "React.FC<LoadingSpinnerProperties>"
+        }
+      ]
+    },
+    "src/components/loading/sync-status.tsx": {
+      "imports": [
+        {
+          "from": "lucide-react",
+          "kind": "import",
+          "imported": [
+            "CheckCircle",
+            "AlertCircle",
+            "Loader2",
+            "Clock"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "@/components/ui/badge",
+          "kind": "import",
+          "imported": [
+            "Badge"
+          ]
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "SyncStatusIndicator",
+          "initKind": "function",
+          "isExported": true,
+          "type": "React.FC<SyncStatusIndicatorProperties>"
+        },
+        {
+          "name": "DataFetchStatus",
+          "initKind": "function",
+          "isExported": true,
+          "type": "React.FC<DataFetchStatusProperties>"
+        },
+        {
+          "name": "ProgressIndicator",
+          "initKind": "function",
+          "isExported": true,
+          "type": "React.FC<ProgressIndicatorProperties>"
+        }
+      ]
+    },
+    "src/components/loading/wallpaper-skeleton.tsx": {
+      "imports": [
+        {
+          "from": "react",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "WallpaperCardSkeleton",
+          "initKind": "function",
+          "isExported": true,
+          "type": "React.FC<\n  WallpaperCardSkeletonProperties\n>"
+        },
+        {
+          "name": "WallpaperGridSkeleton",
+          "initKind": "function",
+          "isExported": true,
+          "type": "React.FC<\n  WallpaperGridSkeletonProperties\n>"
+        },
+        {
+          "name": "LoadingState",
+          "initKind": "function",
+          "isExported": true,
+          "type": "React.FC<LoadingStateProperties>"
+        }
+      ]
+    },
+    "src/components/markdown/markdown.tsx": {
+      "imports": [
+        {
+          "from": "react-markdown",
+          "kind": "import"
+        },
+        {
+          "from": "react-syntax-highlighter",
+          "kind": "import"
+        },
+        {
+          "from": "react-syntax-highlighter/dist/esm/styles/prism",
+          "kind": "import"
+        },
+        {
+          "from": "remark-gfm",
+          "kind": "import"
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import"
+        },
+        {
+          "from": "react-markdown",
+          "kind": "import"
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/components/motion/motion.tsx": {
+      "imports": [
+        {
+          "from": "motion/react",
+          "kind": "import",
+          "imported": [
+            "useAnimate"
+          ]
+        },
+        {
+          "from": "motion/react-client",
+          "kind": "import",
+          "isNamespace": true
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "imported": [
+            "useState"
+          ]
+        },
+        {
+          "from": "@/components/ui/button",
+          "kind": "import",
+          "imported": [
+            "Button"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "generateBoxProperties",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "MotionDemo",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/components/repo-data/repo-data.tsx": {
+      "imports": [
+        {
+          "from": "react-query",
+          "kind": "import",
+          "imported": [
+            "useQuery"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "RepoData",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/components/ui/badge.tsx": {
+      "imports": [
+        {
+          "from": "class-variance-authority",
+          "kind": "import",
+          "imported": [
+            "cva",
+            "VariantProps"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "isNamespace": true
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "badgeVariants",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "Badge",
+          "initKind": "function",
+          "isExported": false
+        }
+      ]
+    },
+    "src/components/ui/button.test.tsx": {
+      "imports": [
+        {
+          "from": "vitest",
+          "kind": "import",
+          "imported": [
+            "describe",
+            "expect",
+            "it"
+          ]
+        },
+        {
+          "from": "@/test/test-utils",
+          "kind": "import",
+          "imported": [
+            "render",
+            "screen"
+          ]
+        },
+        {
+          "from": "./button",
+          "kind": "import",
+          "imported": [
+            "Button"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/components/ui/button.tsx"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/components/ui/button.tsx": {
+      "imports": [
+        {
+          "from": "@radix-ui/react-slot",
+          "kind": "import",
+          "imported": [
+            "Slot"
+          ]
+        },
+        {
+          "from": "class-variance-authority",
+          "kind": "import",
+          "imported": [
+            "cva",
+            "VariantProps"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "isNamespace": true
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "buttonVariants",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "Button",
+          "initKind": "unknown",
+          "isExported": false
+        }
+      ]
+    },
+    "src/components/ui/card.tsx": {
+      "imports": [
+        {
+          "from": "react",
+          "kind": "import",
+          "isNamespace": true
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "Card",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "CardHeader",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "CardTitle",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "CardDescription",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "CardContent",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "CardFooter",
+          "initKind": "unknown",
+          "isExported": false
+        }
+      ]
+    },
+    "src/components/ui/dialog.tsx": {
+      "imports": [
+        {
+          "from": "@radix-ui/react-dialog",
+          "kind": "import",
+          "isNamespace": true
+        },
+        {
+          "from": "lucide-react",
+          "kind": "import",
+          "imported": [
+            "X"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "isNamespace": true
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "Dialog",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "DialogTrigger",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "DialogPortal",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "DialogClose",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "DialogOverlay",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "DialogContent",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "DialogHeader",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "DialogFooter",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "DialogTitle",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "DialogDescription",
+          "initKind": "unknown",
+          "isExported": false
+        }
+      ]
+    },
+    "src/components/ui/form.tsx": {
+      "imports": [
+        {
+          "from": "@radix-ui/react-slot",
+          "kind": "import",
+          "imported": [
+            "Slot"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "isNamespace": true
+        },
+        {
+          "from": "react-hook-form",
+          "kind": "import",
+          "imported": [
+            "Controller",
+            "FormProvider",
+            "useFormContext"
+          ]
+        },
+        {
+          "from": "@/components/ui/label",
+          "kind": "import",
+          "imported": [
+            "Label"
+          ]
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        },
+        {
+          "from": "@radix-ui/react-label",
+          "kind": "import",
+          "isNamespace": true
+        },
+        {
+          "from": "react-hook-form",
+          "kind": "import",
+          "imported": [
+            "ControllerProps",
+            "FieldPath",
+            "FieldValues"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "Form",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "FormFieldContext",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "FormField",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "useFormField",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "FormItemContext",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "FormItem",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "FormLabel",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "FormControl",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "FormDescription",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "FormMessage",
+          "initKind": "unknown",
+          "isExported": false
+        }
+      ]
+    },
+    "src/components/ui/input.tsx": {
+      "imports": [
+        {
+          "from": "react",
+          "kind": "import",
+          "isNamespace": true
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "Input",
+          "initKind": "unknown",
+          "isExported": false
+        }
+      ]
+    },
+    "src/components/ui/label.tsx": {
+      "imports": [
+        {
+          "from": "@radix-ui/react-label",
+          "kind": "import",
+          "isNamespace": true
+        },
+        {
+          "from": "class-variance-authority",
+          "kind": "import",
+          "imported": [
+            "cva",
+            "VariantProps"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "isNamespace": true
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "labelVariants",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "Label",
+          "initKind": "unknown",
+          "isExported": false
+        }
+      ]
+    },
+    "src/components/ui/progress.tsx": {
+      "imports": [
+        {
+          "from": "@radix-ui/react-progress",
+          "kind": "import",
+          "isNamespace": true
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "isNamespace": true
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "Progress",
+          "initKind": "unknown",
+          "isExported": false
+        }
+      ]
+    },
+    "src/components/ui/select.tsx": {
+      "imports": [
+        {
+          "from": "@radix-ui/react-select",
+          "kind": "import",
+          "isNamespace": true
+        },
+        {
+          "from": "lucide-react",
+          "kind": "import",
+          "imported": [
+            "Check",
+            "ChevronDown",
+            "ChevronUp"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "isNamespace": true
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "Select",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "SelectGroup",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "SelectValue",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "SelectTrigger",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "SelectScrollUpButton",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "SelectScrollDownButton",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "SelectContent",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "SelectLabel",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "SelectItem",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "SelectSeparator",
+          "initKind": "unknown",
+          "isExported": false
+        }
+      ]
+    },
+    "src/components/wallpaper-card/card-footer.local.tsx": {
+      "imports": [
+        {
+          "from": "react",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "@/hooks/use-downloads",
+          "kind": "import",
+          "imported": [
+            "formatBytes"
+          ]
+        },
+        {
+          "from": "./types.local",
+          "kind": "import",
+          "imported": [
+            "CardFooterProperties"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "CardFooter",
+          "initKind": "function",
+          "isExported": true,
+          "type": "React.FC<CardFooterProperties>"
+        }
+      ]
+    },
+    "src/components/wallpaper-card/category-badge.local.tsx": {
+      "imports": [
+        {
+          "from": "react",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "@/components/ui/badge",
+          "kind": "import",
+          "imported": [
+            "Badge"
+          ]
+        },
+        {
+          "from": "./types.local",
+          "kind": "import",
+          "imported": [
+            "CategoryBadgeProperties"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "CategoryBadge",
+          "initKind": "function",
+          "isExported": true,
+          "type": "React.FC<CategoryBadgeProperties>"
+        }
+      ]
+    },
+    "src/components/wallpaper-card/hover-actions.local.tsx": {
+      "imports": [
+        {
+          "from": "lucide-react",
+          "kind": "import",
+          "imported": [
+            "Download",
+            "Check",
+            "Pause",
+            "X",
+            "AlertCircle",
+            "Play",
+            "Eye"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "@/components/ui/button",
+          "kind": "import",
+          "imported": [
+            "Button"
+          ]
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        },
+        {
+          "from": "./types.local",
+          "kind": "import",
+          "imported": [
+            "HoverActionsProperties"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "statusIcons",
+          "initKind": "object",
+          "isExported": false
+        },
+        {
+          "name": "statusColors",
+          "initKind": "object",
+          "isExported": false
+        },
+        {
+          "name": "HoverActions",
+          "initKind": "function",
+          "isExported": true,
+          "type": "React.FC<HoverActionsProperties>"
+        }
+      ]
+    },
+    "src/components/wallpaper-card/image-container.local.tsx": {
+      "imports": [
+        {
+          "from": "lucide-react",
+          "kind": "import",
+          "imported": [
+            "AlertCircle"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        },
+        {
+          "from": "./types.local",
+          "kind": "import",
+          "imported": [
+            "ImageContainerProperties"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "ImageContainer",
+          "initKind": "function",
+          "isExported": true,
+          "type": "React.FC<ImageContainerProperties>"
+        }
+      ]
+    },
+    "src/components/wallpaper-card/index.ts": {
+      "imports": [
+        {
+          "from": "./wallpaper-card",
+          "kind": "export",
+          "imported": [
+            "WallpaperCard"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/components/wallpaper-card/wallpaper-card.tsx"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/components/wallpaper-card/progress-overlay.local.tsx": {
+      "imports": [
+        {
+          "from": "react",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "@/hooks/use-downloads",
+          "kind": "import",
+          "imported": [
+            "formatBytes",
+            "formatSpeed",
+            "formatTimeRemaining"
+          ]
+        },
+        {
+          "from": "./types.local",
+          "kind": "import",
+          "imported": [
+            "ProgressOverlayProperties"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "ProgressOverlay",
+          "initKind": "function",
+          "isExported": true,
+          "type": "React.FC<ProgressOverlayProperties>"
+        }
+      ]
+    },
+    "src/components/wallpaper-card/status-badge.local.tsx": {
+      "imports": [
+        {
+          "from": "lucide-react",
+          "kind": "import",
+          "imported": [
+            "Download",
+            "Check",
+            "Pause",
+            "AlertCircle",
+            "Play"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "@/components/ui/badge",
+          "kind": "import",
+          "imported": [
+            "Badge"
+          ]
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        },
+        {
+          "from": "./types.local",
+          "kind": "import",
+          "imported": [
+            "StatusBadgeProperties"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "statusIcons",
+          "initKind": "object",
+          "isExported": false
+        },
+        {
+          "name": "StatusBadge",
+          "initKind": "function",
+          "isExported": true,
+          "type": "React.FC<StatusBadgeProperties>"
+        }
+      ]
+    },
+    "src/components/wallpaper-card/types.local.ts": {
+      "imports": [
+        {
+          "from": "@/types/download",
+          "kind": "import",
+          "imported": [
+            "DownloadStatus",
+            "DownloadProgress"
+          ]
+        },
+        {
+          "from": "@/types/wallpaper",
+          "kind": "import",
+          "imported": [
+            "WallpaperItem"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/components/wallpaper-card/wallpaper-card.tsx": {
+      "imports": [
+        {
+          "from": "class-variance-authority",
+          "kind": "import",
+          "imported": [
+            "cva",
+            "VariantProps"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "isDefault": true,
+          "imported": [
+            "useState",
+            "useCallback"
+          ]
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        },
+        {
+          "from": "./card-footer.local",
+          "kind": "import",
+          "imported": [
+            "CardFooter"
+          ]
+        },
+        {
+          "from": "./category-badge.local",
+          "kind": "import",
+          "imported": [
+            "CategoryBadge"
+          ]
+        },
+        {
+          "from": "./hover-actions.local",
+          "kind": "import",
+          "imported": [
+            "HoverActions"
+          ]
+        },
+        {
+          "from": "./image-container.local",
+          "kind": "import",
+          "imported": [
+            "ImageContainer"
+          ]
+        },
+        {
+          "from": "./progress-overlay.local",
+          "kind": "import",
+          "imported": [
+            "ProgressOverlay"
+          ]
+        },
+        {
+          "from": "./status-badge.local",
+          "kind": "import",
+          "imported": [
+            "StatusBadge"
+          ]
+        },
+        {
+          "from": "@/types/download",
+          "kind": "import",
+          "imported": [
+            "DownloadStatus",
+            "DownloadProgress"
+          ]
+        },
+        {
+          "from": "@/types/wallpaper",
+          "kind": "import",
+          "imported": [
+            "WallpaperItem"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "cardVariants",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "WallpaperCard",
+          "initKind": "unknown",
+          "isExported": true
+        }
+      ]
+    },
+    "src/components/wallpaper-grid/index.ts": {
+      "imports": [
+        {
+          "from": "../wallpaper-card",
+          "kind": "export",
+          "imported": [
+            "WallpaperCard"
+          ]
+        },
+        {
+          "from": "./wallpaper-grid",
+          "kind": "export",
+          "imported": [
+            "WallpaperGrid"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/components/wallpaper-card/index.ts",
+        "src/components/wallpaper-grid/wallpaper-grid.tsx"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/components/wallpaper-grid/wallpaper-grid.tsx": {
+      "imports": [
+        {
+          "from": "class-variance-authority",
+          "kind": "import",
+          "imported": [
+            "cva",
+            "VariantProps"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "@/lib/utils",
+          "kind": "import",
+          "imported": [
+            "cn"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "gridVariants",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "WallpaperGrid",
+          "initKind": "unknown",
+          "isExported": true
+        }
+      ]
+    },
+    "src/hooks/index.ts": {
+      "imports": [
+        {
+          "from": "./use-debounce/use-debounce",
+          "kind": "export",
+          "imported": [
+            "useDebounce"
+          ]
+        },
+        {
+          "from": "./use-local-storage/use-local-storage",
+          "kind": "export",
+          "imported": [
+            "useLocalStorage"
+          ]
+        },
+        {
+          "from": "./use-media-query/use-media-query",
+          "kind": "export",
+          "imported": [
+            "useMediaQuery"
+          ]
+        },
+        {
+          "from": "./use-event-listener/use-event-listener",
+          "kind": "export",
+          "imported": [
+            "useEventListener"
+          ]
+        },
+        {
+          "from": "./use-intersection/use-intersection",
+          "kind": "export",
+          "imported": [
+            "useIntersection"
+          ]
+        },
+        {
+          "from": "./use-previous/use-previous",
+          "kind": "export",
+          "imported": [
+            "usePrevious"
+          ]
+        },
+        {
+          "from": "./use-wallpapers",
+          "kind": "export"
+        },
+        {
+          "from": "./use-downloads",
+          "kind": "export"
+        }
+      ],
+      "dependencies": [
+        "src/hooks/use-debounce/use-debounce.ts",
+        "src/hooks/use-downloads/index.ts",
+        "src/hooks/use-event-listener/use-event-listener.ts",
+        "src/hooks/use-intersection/use-intersection.ts",
+        "src/hooks/use-local-storage/use-local-storage.ts",
+        "src/hooks/use-media-query/use-media-query.ts",
+        "src/hooks/use-previous/use-previous.ts",
+        "src/hooks/use-wallpapers/index.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/hooks/use-debounce/use-debounce.test.ts": {
+      "imports": [
+        {
+          "from": "@testing-library/react",
+          "kind": "import",
+          "imported": [
+            "act",
+            "renderHook"
+          ]
+        },
+        {
+          "from": "vitest",
+          "kind": "import",
+          "imported": [
+            "afterEach",
+            "beforeEach",
+            "describe",
+            "expect",
+            "it",
+            "vi"
+          ]
+        },
+        {
+          "from": "./use-debounce",
+          "kind": "import",
+          "imported": [
+            "useDebounce"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/hooks/use-debounce/use-debounce.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/hooks/use-debounce/use-debounce.ts": {
+      "imports": [
+        {
+          "from": "react",
+          "kind": "import",
+          "imported": [
+            "useEffect",
+            "useState"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [
+        {
+          "name": "useDebounce",
+          "params": [
+            {
+              "name": "value",
+              "type": "T"
+            },
+            {
+              "name": "delay",
+              "type": "number"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "T"
+        }
+      ],
+      "classes": [],
+      "constants": []
+    },
+    "src/hooks/use-downloads/index.ts": {
+      "imports": [
+        {
+          "from": "./use-downloads",
+          "kind": "export"
+        },
+        {
+          "from": "./use-downloads",
+          "kind": "export",
+          "imported": [
+            "useDownloads"
+          ]
+        },
+        {
+          "from": "./utils",
+          "kind": "export"
+        }
+      ],
+      "dependencies": [
+        "src/hooks/use-downloads/use-downloads.ts",
+        "src/hooks/use-downloads/utils.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/hooks/use-downloads/use-downloads.ts": {
+      "imports": [
+        {
+          "from": "react",
+          "kind": "import",
+          "isDefault": true,
+          "imported": [
+            "useCallback",
+            "useEffect",
+            "useRef"
+          ]
+        },
+        {
+          "from": "@/hooks/use-local-storage/use-local-storage",
+          "kind": "import",
+          "imported": [
+            "useLocalStorage"
+          ]
+        },
+        {
+          "from": "@/types/download",
+          "kind": "import",
+          "imported": [
+            "DownloadItem",
+            "DownloadState",
+            "DownloadActions",
+            "DownloadProgress",
+            "DownloadStatus"
+          ]
+        },
+        {
+          "from": "@/types/wallpaper",
+          "kind": "import",
+          "imported": [
+            "WallpaperItem"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "DEFAULT_DOWNLOAD_STATE",
+          "initKind": "object",
+          "isExported": false,
+          "type": "DownloadState"
+        },
+        {
+          "name": "useDownloads",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/hooks/use-downloads/utils.ts": {
+      "imports": [],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "formatBytes",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "formatSpeed",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "formatTimeRemaining",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "generateSafeFileName",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "isSupportedImageType",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getFileExtension",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "isValidDownloadUrl",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/hooks/use-event-listener/use-event-listener.test.ts": {
+      "imports": [
+        {
+          "from": "@testing-library/react",
+          "kind": "import",
+          "imported": [
+            "renderHook",
+            "act"
+          ]
+        },
+        {
+          "from": "vitest",
+          "kind": "import",
+          "imported": [
+            "describe",
+            "it",
+            "expect",
+            "vi"
+          ]
+        },
+        {
+          "from": "./use-event-listener",
+          "kind": "import",
+          "imported": [
+            "useEventListener"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/hooks/use-event-listener/use-event-listener.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/hooks/use-event-listener/use-event-listener.ts": {
+      "imports": [
+        {
+          "from": "react",
+          "kind": "import",
+          "imported": [
+            "useEffect",
+            "useRef"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [
+        {
+          "name": "useEventListener",
+          "params": [
+            {
+              "name": "eventName",
+              "type": "K"
+            },
+            {
+              "name": "handler",
+              "type": "(event: WindowEventMap[K]) => void"
+            },
+            {
+              "name": "element",
+              "type": "T",
+              "optional": true
+            },
+            {
+              "name": "options",
+              "type": "boolean | AddEventListenerOptions",
+              "optional": true
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "void"
+        }
+      ],
+      "classes": [],
+      "constants": []
+    },
+    "src/hooks/use-intersection/use-intersection.test.ts": {
+      "imports": [
+        {
+          "from": "@testing-library/react",
+          "kind": "import",
+          "imported": [
+            "renderHook",
+            "act"
+          ]
+        },
+        {
+          "from": "vitest",
+          "kind": "import",
+          "imported": [
+            "describe",
+            "it",
+            "expect",
+            "vi",
+            "beforeEach"
+          ]
+        },
+        {
+          "from": "./use-intersection",
+          "kind": "import",
+          "imported": [
+            "useIntersection"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/hooks/use-intersection/use-intersection.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/hooks/use-intersection/use-intersection.ts": {
+      "imports": [
+        {
+          "from": "react",
+          "kind": "import",
+          "imported": [
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "imported": [
+            "RefObject"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [
+        {
+          "name": "useIntersection",
+          "params": [
+            {
+              "name": "elementReference",
+              "type": "RefObject<T>"
+            },
+            {
+              "name": "options",
+              "type": "IntersectionObserverInit"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "IntersectionObserverEntry | null"
+        }
+      ],
+      "classes": [],
+      "constants": []
+    },
+    "src/hooks/use-local-storage/use-local-storage.test.ts": {
+      "imports": [
+        {
+          "from": "@testing-library/react",
+          "kind": "import",
+          "imported": [
+            "act",
+            "renderHook"
+          ]
+        },
+        {
+          "from": "vitest",
+          "kind": "import",
+          "imported": [
+            "afterEach",
+            "beforeEach",
+            "describe",
+            "expect",
+            "it",
+            "vi"
+          ]
+        },
+        {
+          "from": "./use-local-storage",
+          "kind": "import",
+          "imported": [
+            "useLocalStorage"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/hooks/use-local-storage/use-local-storage.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/hooks/use-local-storage/use-local-storage.ts": {
+      "imports": [
+        {
+          "from": "react",
+          "kind": "import",
+          "imported": [
+            "useCallback",
+            "useEffect",
+            "useState"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [
+        {
+          "name": "useLocalStorage",
+          "params": [
+            {
+              "name": "key",
+              "type": "string"
+            },
+            {
+              "name": "initialValue",
+              "type": "T"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true
+        }
+      ],
+      "classes": [],
+      "constants": []
+    },
+    "src/hooks/use-media-query/use-media-query.test.ts": {
+      "imports": [
+        {
+          "from": "@testing-library/react",
+          "kind": "import",
+          "imported": [
+            "act",
+            "renderHook"
+          ]
+        },
+        {
+          "from": "vitest",
+          "kind": "import",
+          "imported": [
+            "afterEach",
+            "beforeEach",
+            "describe",
+            "expect",
+            "it",
+            "vi"
+          ]
+        },
+        {
+          "from": "./use-media-query",
+          "kind": "import",
+          "imported": [
+            "useMediaQuery"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/hooks/use-media-query/use-media-query.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/hooks/use-media-query/use-media-query.ts": {
+      "imports": [
+        {
+          "from": "react",
+          "kind": "import",
+          "imported": [
+            "useEffect",
+            "useState"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [
+        {
+          "name": "useMediaQuery",
+          "params": [
+            {
+              "name": "query",
+              "type": "string"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "boolean"
+        }
+      ],
+      "classes": [],
+      "constants": []
+    },
+    "src/hooks/use-previous/use-previous.test.ts": {
+      "imports": [
+        {
+          "from": "@testing-library/react",
+          "kind": "import",
+          "imported": [
+            "renderHook"
+          ]
+        },
+        {
+          "from": "vitest",
+          "kind": "import",
+          "imported": [
+            "describe",
+            "it",
+            "expect"
+          ]
+        },
+        {
+          "from": "./use-previous",
+          "kind": "import",
+          "imported": [
+            "usePrevious"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/hooks/use-previous/use-previous.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/hooks/use-previous/use-previous.ts": {
+      "imports": [
+        {
+          "from": "react",
+          "kind": "import",
+          "imported": [
+            "useEffect",
+            "useRef"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [
+        {
+          "name": "usePrevious",
+          "params": [
+            {
+              "name": "value",
+              "type": "T"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "T | undefined"
+        }
+      ],
+      "classes": [],
+      "constants": []
+    },
+    "src/hooks/use-wallpapers/index.ts": {
+      "imports": [
+        {
+          "from": "./use-wallpapers",
+          "kind": "export"
+        },
+        {
+          "from": "./use-wallpapers",
+          "kind": "export",
+          "imported": [
+            "wallpaperKeys"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/hooks/use-wallpapers/use-wallpapers.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/hooks/use-wallpapers/use-wallpapers.ts": {
+      "imports": [
+        {
+          "from": "react",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "react-query",
+          "kind": "import",
+          "imported": [
+            "useQuery",
+            "useInfiniteQuery"
+          ]
+        },
+        {
+          "from": "@/lib/github-api",
+          "kind": "import",
+          "imported": [
+            "getAllWallpapers",
+            "searchWallpapers",
+            "getWallpapersPaginated"
+          ]
+        },
+        {
+          "from": "@/lib/wallpaper-service",
+          "kind": "import",
+          "imported": [
+            "getCategories",
+            "getWallpapersByCategory",
+            "getFeaturedWallpapers"
+          ]
+        },
+        {
+          "from": "@/types/wallpaper",
+          "kind": "import",
+          "imported": [
+            "WallpaperItem",
+            "WallpaperFilters"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "wallpaperKeys",
+          "initKind": "object",
+          "isExported": true
+        },
+        {
+          "name": "useCategories",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "useFeaturedWallpapers",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "useAllWallpapers",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "useWallpapersByCategory",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "useSearchWallpapers",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "useInfiniteWallpapers",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "useWallpaper",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "useFilteredWallpapers",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/layout/default-layout.tsx": {
+      "imports": [
+        {
+          "from": "react-helmet-async",
+          "kind": "import",
+          "imported": [
+            "Helmet",
+            "HelmetProvider"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "DefaultLayout",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/lib/api/client.ts": {
+      "imports": [],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "API_BASE_URL",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "apiRequest",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "apiClient",
+          "initKind": "object",
+          "isExported": true
+        }
+      ]
+    },
+    "src/lib/api/index.ts": {
+      "imports": [
+        {
+          "from": "./client",
+          "kind": "export",
+          "imported": [
+            "apiClient",
+            "ApiResponse",
+            "ApiError"
+          ]
+        },
+        {
+          "from": "./wallpaper-service",
+          "kind": "export"
+        }
+      ],
+      "dependencies": [
+        "src/lib/api/client.ts",
+        "src/lib/api/wallpaper-service.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/lib/api/wallpaper-service.ts": {
+      "imports": [
+        {
+          "from": "./client",
+          "kind": "import",
+          "imported": [
+            "apiClient"
+          ]
+        },
+        {
+          "from": "@/types/wallpaper",
+          "kind": "import",
+          "imported": [
+            "WallpaperItem",
+            "WallpaperCategory"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/lib/api/client.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "getCategories",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getWallpapersByCategory",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getFeaturedWallpapers",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getWallpapers",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "createWallpaper",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "createMultipleWallpapers",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "incrementDownloadCount",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "incrementViewCount",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "trackEvent",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getSyncStatus",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "importData",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/lib/database/categories.ts": {
+      "imports": [
+        {
+          "from": "./connection",
+          "kind": "import",
+          "imported": [
+            "getDatabase"
+          ]
+        },
+        {
+          "from": "@/types/database",
+          "kind": "import",
+          "imported": [
+            "DatabaseCategory"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/lib/database/connection.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "getCategories",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getCategoryBySlug",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getCategoryById",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "createCategory",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "updateCategoryCount",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "updateCategory",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "deleteCategory",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getCategoriesWithCounts",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/lib/database/connection.ts": {
+      "imports": [
+        {
+          "from": "path",
+          "kind": "import"
+        },
+        {
+          "from": "better-sqlite3",
+          "kind": "import"
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/lib/database/debug.ts": {
+      "imports": [
+        {
+          "from": "./connection",
+          "kind": "import",
+          "imported": [
+            "getDatabase"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/lib/database/connection.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "exportDatabaseState",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "clearDatabase",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getDatabaseSummary",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/lib/database/import.ts": {
+      "imports": [
+        {
+          "from": "./categories",
+          "kind": "import"
+        },
+        {
+          "from": "./connection",
+          "kind": "import"
+        },
+        {
+          "from": "./metadata",
+          "kind": "import"
+        },
+        {
+          "from": "./wallpapers",
+          "kind": "import"
+        },
+        {
+          "from": "fs/promises",
+          "kind": "dynamic-import"
+        }
+      ],
+      "dependencies": [
+        "src/lib/database/categories.ts",
+        "src/lib/database/connection.ts",
+        "src/lib/database/metadata.ts",
+        "src/lib/database/wallpapers.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/lib/database/index.ts": {
+      "imports": [
+        {
+          "from": "./connection",
+          "kind": "export",
+          "imported": [
+            "getDb",
+            "closeDb"
+          ]
+        },
+        {
+          "from": "./categories",
+          "kind": "export",
+          "imported": [
+            "getCategories",
+            "getCategoryBySlug",
+            "createCategory",
+            "updateCategoryCount"
+          ]
+        },
+        {
+          "from": "./wallpapers",
+          "kind": "export",
+          "imported": [
+            "getWallpapers",
+            "getWallpaperById",
+            "getWallpapersByCategory",
+            "getFeaturedWallpapers",
+            "createWallpaper",
+            "incrementDownloadCount",
+            "incrementViewCount"
+          ]
+        },
+        {
+          "from": "./metadata",
+          "kind": "export",
+          "imported": [
+            "updateSyncMeta",
+            "getSyncMeta",
+            "getAllSyncMeta",
+            "trackEvent",
+            "getAnalytics",
+            "getStats",
+            "getSyncStatus"
+          ]
+        },
+        {
+          "from": "./sync",
+          "kind": "export",
+          "imported": [
+            "syncCategories",
+            "getSyncOperationStatus"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/lib/database/categories.ts",
+        "src/lib/database/connection.ts",
+        "src/lib/database/metadata.ts",
+        "src/lib/database/sync.ts",
+        "src/lib/database/wallpapers.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/lib/database/metadata.ts": {
+      "imports": [
+        {
+          "from": "./connection",
+          "kind": "import",
+          "imported": [
+            "getDatabase"
+          ]
+        },
+        {
+          "from": "@/types/database",
+          "kind": "import",
+          "imported": [
+            "DatabaseSyncMeta",
+            "DatabaseAnalytics"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/lib/database/connection.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "updateSyncMeta",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getSyncMeta",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getAllSyncMeta",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "deleteSyncMeta",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "trackEvent",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getAnalytics",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getAnalyticsSummary",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "cleanupAnalytics",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getStats",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getSyncStatus",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getCategoryStats",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/lib/database/sync.ts": {
+      "imports": [
+        {
+          "from": "@/lib/database",
+          "kind": "import",
+          "imported": [
+            "getDatabaseCategories",
+            "createCategory",
+            "getStats"
+          ]
+        },
+        {
+          "from": "@/lib/github-api",
+          "kind": "import",
+          "imported": [
+            "getCategoriesLight"
+          ]
+        },
+        {
+          "from": "@/types/database",
+          "kind": "import",
+          "imported": [
+            "DatabaseCategory"
+          ]
+        },
+        {
+          "from": "@/types/wallpaper",
+          "kind": "import",
+          "imported": [
+            "WallpaperCategory"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "convertCategory",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "syncCategories",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getSyncStatus",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/lib/database/wallpapers.ts": {
+      "imports": [
+        {
+          "from": "./connection",
+          "kind": "import",
+          "imported": [
+            "getDatabase"
+          ]
+        },
+        {
+          "from": "@/types/database",
+          "kind": "import",
+          "imported": [
+            "DatabaseWallpaper",
+            "DatabaseWallpaperFilters"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/lib/database/connection.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "getWallpapers",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getWallpapersByCategory",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getFeaturedWallpapers",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getWallpaperById",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getWallpaperByGithubId",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "createWallpaper",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "updateWallpaper",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "incrementDownloadCount",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "incrementViewCount",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "deleteWallpaper",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "createMultipleWallpapers",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/lib/github-api/github-api.ts": {
+      "imports": [
+        {
+          "from": "@/types/github",
+          "kind": "import",
+          "imported": [
+            "GitHubContentItem",
+            "GitHubDirectoryResponse"
+          ]
+        },
+        {
+          "from": "@/types/wallpaper",
+          "kind": "import",
+          "imported": [
+            "WallpaperItem",
+            "WallpaperCategory"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [
+        {
+          "name": "GitHubApiError",
+          "isExported": true,
+          "methods": [],
+          "properties": [],
+          "extends": "Error"
+        },
+        {
+          "name": "RequestQueue",
+          "isExported": false,
+          "methods": [
+            {
+              "name": "add",
+              "params": [
+                {
+                  "name": "request",
+                  "type": "() => Promise<T>"
+                }
+              ],
+              "isAsync": true,
+              "returnType": "Promise<T>"
+            },
+            {
+              "name": "processQueue",
+              "params": [],
+              "isAsync": true,
+              "isPrivate": true
+            },
+            {
+              "name": "delay",
+              "params": [
+                {
+                  "name": "ms",
+                  "type": "number"
+                }
+              ],
+              "isAsync": false,
+              "returnType": "Promise<void>",
+              "isPrivate": true
+            }
+          ],
+          "properties": [
+            {
+              "name": "queue",
+              "type": "Array<() => Promise<any>>",
+              "isPrivate": true
+            },
+            {
+              "name": "processing",
+              "isPrivate": true
+            },
+            {
+              "name": "lastRequestTime",
+              "isPrivate": true
+            }
+          ]
+        }
+      ],
+      "constants": [
+        {
+          "name": "GITHUB_CONFIG",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "IMAGE_EXTENSIONS",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "buildApiUrl",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "buildRawUrl",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "isImageFile",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "extractFileInfo",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "extractResolutionFromName",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "getAspectRatio",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "fetchDirectoryContents",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "getCategories",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getAllWallpapers",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getWallpapersByCategory",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getWallpapersByCategoryLimited",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "searchWallpapers",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getWallpapersPaginated",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "getCategoriesLight",
+          "initKind": "function",
+          "isExported": true
+        },
+        {
+          "name": "RATE_LIMIT_CONFIG",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "requestQueue",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "FEATURED_CATEGORIES",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "fetchWithRateLimit",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "fetchDirectoryContentsWithRateLimit",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "getFeaturedWallpapers",
+          "initKind": "function",
+          "isExported": true
+        }
+      ]
+    },
+    "src/lib/github-api/index.ts": {
+      "imports": [
+        {
+          "from": "./github-api",
+          "kind": "export"
+        },
+        {
+          "from": "./github-api",
+          "kind": "export",
+          "imported": [
+            "GitHubApiError",
+            "getCategoriesLight",
+            "getFeaturedWallpapers",
+            "getWallpapersByCategoryLimited"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/lib/github-api/github-api.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/lib/utils.ts": {
+      "imports": [
+        {
+          "from": "clsx",
+          "kind": "import",
+          "imported": [
+            "clsx",
+            "ClassValue"
+          ]
+        },
+        {
+          "from": "tailwind-merge",
+          "kind": "import",
+          "imported": [
+            "twMerge"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [
+        {
+          "name": "cn",
+          "params": [
+            {
+              "name": "inputs",
+              "type": "ClassValue[]",
+              "rest": true
+            }
+          ],
+          "isAsync": false,
+          "isExported": true
+        }
+      ],
+      "classes": [],
+      "constants": []
+    },
+    "src/lib/wallpaper-service/index.ts": {
+      "imports": [
+        {
+          "from": "./wallpaper-service",
+          "kind": "export"
+        }
+      ],
+      "dependencies": [
+        "src/lib/wallpaper-service/wallpaper-service.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/lib/wallpaper-service/wallpaper-service.ts": {
+      "imports": [
+        {
+          "from": "@/lib/api/wallpaper-service",
+          "kind": "export",
+          "imported": [
+            "getCategories",
+            "getWallpapersByCategory",
+            "getFeaturedWallpapers",
+            "getWallpapers",
+            "createWallpaper",
+            "createMultipleWallpapers",
+            "incrementDownloadCount",
+            "incrementViewCount",
+            "trackEvent",
+            "getSyncStatus",
+            "importData"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/main.tsx": {
+      "imports": [
+        {
+          "from": "@tanstack/react-router",
+          "kind": "import",
+          "imported": [
+            "RouterProvider",
+            "createRouter"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "imported": [
+            "StrictMode"
+          ]
+        },
+        {
+          "from": "react-dom/client",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "react-query",
+          "kind": "import",
+          "imported": [
+            "QueryClient",
+            "QueryClientProvider"
+          ]
+        },
+        {
+          "from": "sonner",
+          "kind": "import",
+          "imported": [
+            "Toaster"
+          ]
+        },
+        {
+          "from": "./index.css",
+          "kind": "import"
+        },
+        {
+          "from": "./routeTree.gen",
+          "kind": "import",
+          "imported": [
+            "routeTree"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "router",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "queryClient",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "App",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "rootElement",
+          "initKind": "unknown",
+          "isExported": false
+        }
+      ]
+    },
+    "src/pages/gallery.tsx": {
+      "imports": [
+        {
+          "from": "react",
+          "kind": "import",
+          "isDefault": true,
+          "imported": [
+            "useState"
+          ]
+        },
+        {
+          "from": "@/components/loading",
+          "kind": "import",
+          "imported": [
+            "LoadingState",
+            "DataFetchStatus",
+            "SyncStatusIndicator"
+          ]
+        },
+        {
+          "from": "@/components/wallpaper-grid",
+          "kind": "import",
+          "imported": [
+            "WallpaperGrid",
+            "WallpaperCard"
+          ]
+        },
+        {
+          "from": "@/hooks/use-downloads",
+          "kind": "import",
+          "imported": [
+            "useDownloads"
+          ]
+        },
+        {
+          "from": "@/hooks/use-wallpapers",
+          "kind": "import",
+          "imported": [
+            "useCategories",
+            "useFeaturedWallpapers",
+            "useWallpapersByCategory"
+          ]
+        },
+        {
+          "from": "@/types/wallpaper",
+          "kind": "import",
+          "imported": [
+            "WallpaperItem"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "GalleryPage",
+          "initKind": "function",
+          "isExported": true,
+          "type": "React.FC"
+        }
+      ]
+    },
+    "src/routeTree.gen.ts": {
+      "imports": [
+        {
+          "from": "./routes/__root",
+          "kind": "import",
+          "imported": [
+            "rootRoute"
+          ]
+        },
+        {
+          "from": "./routes/index",
+          "kind": "import",
+          "imported": [
+            "IndexImport"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/routes/__root.tsx",
+        "src/routes/index.tsx"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "IndexRoute",
+          "initKind": "unknown",
+          "isExported": false
+        },
+        {
+          "name": "rootRouteChildren",
+          "initKind": "object",
+          "isExported": false,
+          "type": "RootRouteChildren"
+        },
+        {
+          "name": "routeTree",
+          "initKind": "unknown",
+          "isExported": true
+        }
+      ]
+    },
+    "src/routes/__root.tsx": {
+      "imports": [
+        {
+          "from": "@tanstack/react-router",
+          "kind": "import",
+          "imported": [
+            "createRootRoute",
+            "Outlet"
+          ]
+        },
+        {
+          "from": "@tanstack/router-devtools",
+          "kind": "import",
+          "imported": [
+            "TanStackRouterDevtools"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "Route",
+          "initKind": "unknown",
+          "isExported": true
+        }
+      ]
+    },
+    "src/routes/index.tsx": {
+      "imports": [
+        {
+          "from": "@tanstack/react-router",
+          "kind": "import",
+          "imported": [
+            "createFileRoute"
+          ]
+        },
+        {
+          "from": "../pages/gallery",
+          "kind": "import",
+          "imported": [
+            "GalleryPage"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/pages/gallery.tsx"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "Route",
+          "initKind": "unknown",
+          "isExported": true
+        }
+      ]
+    },
+    "src/test/setup.ts": {
+      "imports": [
+        {
+          "from": "@testing-library/jest-dom/vitest",
+          "kind": "import"
+        },
+        {
+          "from": "@testing-library/react",
+          "kind": "import",
+          "imported": [
+            "cleanup"
+          ]
+        },
+        {
+          "from": "vitest",
+          "kind": "import",
+          "imported": [
+            "afterEach",
+            "beforeAll",
+            "expect",
+            "vi"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/test/test-utils.tsx": {
+      "imports": [
+        {
+          "from": "@testing-library/react",
+          "kind": "import",
+          "imported": [
+            "rtlRender"
+          ]
+        },
+        {
+          "from": "@testing-library/user-event",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "@testing-library/react",
+          "kind": "import",
+          "imported": [
+            "RenderOptions"
+          ]
+        },
+        {
+          "from": "react",
+          "kind": "import",
+          "imported": [
+            "ReactElement"
+          ]
+        },
+        {
+          "from": "@testing-library/react",
+          "kind": "export"
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": [
+        {
+          "name": "AllTheProviders",
+          "initKind": "function",
+          "isExported": false
+        },
+        {
+          "name": "customRender",
+          "initKind": "function",
+          "isExported": false
+        }
+      ]
+    },
+    "src/types/database.ts": {
+      "imports": [],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/types/download.ts": {
+      "imports": [
+        {
+          "from": "./wallpaper",
+          "kind": "import",
+          "imported": [
+            "WallpaperItem"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/types/wallpaper.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/types/github.ts": {
+      "imports": [],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/types/wallpaper.ts": {
+      "imports": [],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/utils/array/array.test.ts": {
+      "imports": [
+        {
+          "from": "vitest",
+          "kind": "import",
+          "imported": [
+            "describe",
+            "it",
+            "expect"
+          ]
+        },
+        {
+          "from": "./array",
+          "kind": "import",
+          "imported": [
+            "chunk",
+            "unique",
+            "groupBy",
+            "flatten",
+            "intersection"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/utils/array/array.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/utils/array/array.ts": {
+      "imports": [],
+      "dependencies": [],
+      "functions": [
+        {
+          "name": "chunk",
+          "params": [
+            {
+              "name": "array",
+              "type": "T[]"
+            },
+            {
+              "name": "size",
+              "type": "number"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "T[][]"
+        },
+        {
+          "name": "unique",
+          "params": [
+            {
+              "name": "array",
+              "type": "T[]"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "T[]"
+        },
+        {
+          "name": "groupBy",
+          "params": [
+            {
+              "name": "array",
+              "type": "T[]"
+            },
+            {
+              "name": "callback",
+              "type": "(item: T) => string"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "Record<string, T[]>"
+        },
+        {
+          "name": "flatten",
+          "params": [
+            {
+              "name": "array",
+              "type": "T[][]"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "T[]"
+        },
+        {
+          "name": "intersection",
+          "params": [
+            {
+              "name": "array1",
+              "type": "T[]"
+            },
+            {
+              "name": "array2",
+              "type": "T[]"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "T[]"
+        }
+      ],
+      "classes": [],
+      "constants": []
+    },
+    "src/utils/date/date.test.ts": {
+      "imports": [
+        {
+          "from": "vitest",
+          "kind": "import",
+          "imported": [
+            "describe",
+            "it",
+            "expect"
+          ]
+        },
+        {
+          "from": "./date",
+          "kind": "import",
+          "imported": [
+            "formatDate",
+            "isToday",
+            "addDays",
+            "daysBetween",
+            "isWeekend",
+            "startOfDay"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/utils/date/date.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/utils/date/date.ts": {
+      "imports": [],
+      "dependencies": [],
+      "functions": [
+        {
+          "name": "formatDate",
+          "params": [
+            {
+              "name": "date",
+              "type": "Date"
+            },
+            {
+              "name": "format"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "string"
+        },
+        {
+          "name": "isToday",
+          "params": [
+            {
+              "name": "date",
+              "type": "Date"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "boolean"
+        },
+        {
+          "name": "addDays",
+          "params": [
+            {
+              "name": "date",
+              "type": "Date"
+            },
+            {
+              "name": "days",
+              "type": "number"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "Date"
+        },
+        {
+          "name": "daysBetween",
+          "params": [
+            {
+              "name": "date1",
+              "type": "Date"
+            },
+            {
+              "name": "date2",
+              "type": "Date"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "number"
+        },
+        {
+          "name": "isWeekend",
+          "params": [
+            {
+              "name": "date",
+              "type": "Date"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "boolean"
+        },
+        {
+          "name": "startOfDay",
+          "params": [
+            {
+              "name": "date",
+              "type": "Date"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "Date"
+        }
+      ],
+      "classes": [],
+      "constants": []
+    },
+    "src/utils/object/object.test.ts": {
+      "imports": [
+        {
+          "from": "vitest",
+          "kind": "import",
+          "imported": [
+            "describe",
+            "it",
+            "expect"
+          ]
+        },
+        {
+          "from": "./object",
+          "kind": "import",
+          "imported": [
+            "deepClone",
+            "deepEqual",
+            "pick",
+            "omit",
+            "deepMerge"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/utils/object/object.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/utils/object/object.ts": {
+      "imports": [],
+      "dependencies": [],
+      "functions": [
+        {
+          "name": "deepClone",
+          "params": [
+            {
+              "name": "object",
+              "type": "T"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "T"
+        },
+        {
+          "name": "deepEqual",
+          "params": [
+            {
+              "name": "object1",
+              "type": "unknown"
+            },
+            {
+              "name": "object2",
+              "type": "unknown"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "boolean"
+        },
+        {
+          "name": "pick",
+          "params": [
+            {
+              "name": "object",
+              "type": "T"
+            },
+            {
+              "name": "keys",
+              "type": "K[]"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "Pick<T, K>"
+        },
+        {
+          "name": "omit",
+          "params": [
+            {
+              "name": "object",
+              "type": "T"
+            },
+            {
+              "name": "keys",
+              "type": "K[]"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "Omit<T, K>"
+        },
+        {
+          "name": "deepMerge",
+          "params": [
+            {
+              "name": "objects",
+              "type": "T[]",
+              "rest": true
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "T"
+        },
+        {
+          "name": "isObject",
+          "params": [
+            {
+              "name": "item",
+              "type": "unknown"
+            }
+          ],
+          "isAsync": false,
+          "isExported": false,
+          "returnType": "item is object"
+        }
+      ],
+      "classes": [],
+      "constants": []
+    },
+    "src/utils/storage/storage.test.ts": {
+      "imports": [
+        {
+          "from": "vitest",
+          "kind": "import",
+          "imported": [
+            "describe",
+            "it",
+            "expect",
+            "vi",
+            "beforeEach"
+          ]
+        },
+        {
+          "from": "./storage",
+          "kind": "import",
+          "imported": [
+            "isStorageAvailable",
+            "getStorageQuota",
+            "getAllStorage",
+            "hasStorageItem",
+            "clearStorageByPrefix",
+            "getStorageSize"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/utils/storage/storage.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/utils/storage/storage.ts": {
+      "imports": [],
+      "dependencies": [],
+      "functions": [
+        {
+          "name": "isStorageAvailable",
+          "params": [
+            {
+              "name": "storage",
+              "type": "Storage"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "boolean"
+        },
+        {
+          "name": "getStorageQuota",
+          "params": [],
+          "isAsync": true,
+          "isExported": true,
+          "returnType": "Promise<number | null>"
+        },
+        {
+          "name": "getAllStorage",
+          "params": [
+            {
+              "name": "storage",
+              "type": "Storage"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "Record<string, unknown>"
+        },
+        {
+          "name": "hasStorageItem",
+          "params": [
+            {
+              "name": "key",
+              "type": "string"
+            },
+            {
+              "name": "storage",
+              "type": "Storage"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "boolean"
+        },
+        {
+          "name": "clearStorageByPrefix",
+          "params": [
+            {
+              "name": "prefix",
+              "type": "string"
+            },
+            {
+              "name": "storage",
+              "type": "Storage"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "void"
+        },
+        {
+          "name": "getStorageSize",
+          "params": [
+            {
+              "name": "storage",
+              "type": "Storage"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "number"
+        }
+      ],
+      "classes": [],
+      "constants": []
+    },
+    "src/utils/string/string.test.ts": {
+      "imports": [
+        {
+          "from": "vitest",
+          "kind": "import",
+          "imported": [
+            "describe",
+            "it",
+            "expect"
+          ]
+        },
+        {
+          "from": "./string",
+          "kind": "import",
+          "imported": [
+            "capitalize",
+            "camelCase",
+            "truncate",
+            "removeWhitespace",
+            "isAlphanumeric",
+            "kebabCase"
+          ]
+        }
+      ],
+      "dependencies": [
+        "src/utils/string/string.ts"
+      ],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "src/utils/string/string.ts": {
+      "imports": [],
+      "dependencies": [],
+      "functions": [
+        {
+          "name": "capitalize",
+          "params": [
+            {
+              "name": "string_",
+              "type": "string"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "string"
+        },
+        {
+          "name": "camelCase",
+          "params": [
+            {
+              "name": "string_",
+              "type": "string"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "string"
+        },
+        {
+          "name": "truncate",
+          "params": [
+            {
+              "name": "string_",
+              "type": "string"
+            },
+            {
+              "name": "length",
+              "type": "number"
+            },
+            {
+              "name": "ellipsis"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "string"
+        },
+        {
+          "name": "removeWhitespace",
+          "params": [
+            {
+              "name": "string_",
+              "type": "string"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "string"
+        },
+        {
+          "name": "isAlphanumeric",
+          "params": [
+            {
+              "name": "string_",
+              "type": "string"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "boolean"
+        },
+        {
+          "name": "kebabCase",
+          "params": [
+            {
+              "name": "string_",
+              "type": "string"
+            }
+          ],
+          "isAsync": false,
+          "isExported": true,
+          "returnType": "string"
+        }
+      ],
+      "classes": [],
+      "constants": []
+    },
+    "src/vite-env.d.ts": {
+      "imports": [],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "tailwind.config.js": {
+      "imports": [
+        {
+          "from": "@tailwindcss/typography",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "tailwindcss-animate",
+          "kind": "import",
+          "isDefault": true
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    },
+    "vite.config.ts": {
+      "imports": [
+        {
+          "from": "path",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "@tanstack/router-plugin/vite",
+          "kind": "import",
+          "imported": [
+            "TanStackRouterVite"
+          ]
+        },
+        {
+          "from": "@vitejs/plugin-react",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "autoprefixer",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "tailwindcss",
+          "kind": "import",
+          "isDefault": true
+        },
+        {
+          "from": "vite",
+          "kind": "import",
+          "imported": [
+            "defineConfig"
+          ]
+        },
+        {
+          "from": "vitest/config",
+          "kind": "import",
+          "imported": [
+            "configDefaults"
+          ]
+        }
+      ],
+      "dependencies": [],
+      "functions": [],
+      "classes": [],
+      "constants": []
+    }
+  }
+}

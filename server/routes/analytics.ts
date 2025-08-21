@@ -1,4 +1,5 @@
 import express from 'express';
+
 import {
   trackEvent,
   getAnalytics,
@@ -6,7 +7,7 @@ import {
   cleanupAnalytics,
   getStats,
   getCategoryStats,
-} from '@/lib/database/metadata';
+} from '@/lib/database';
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ const router = express.Router();
  * GET /api/analytics/stats
  * Get database statistics
  */
-router.get('/stats', async (_req, res) => {
+router.get('/stats', async (_request, res) => {
   try {
     const stats = getStats();
     const categoryStats = getCategoryStats();
@@ -40,15 +41,10 @@ router.get('/stats', async (_req, res) => {
  * GET /api/analytics/events
  * Get analytics events with optional filtering
  */
-router.get('/events', async (req, res) => {
+router.get('/events', async (request, res) => {
   try {
-    const {
-      eventType,
-      categoryName,
-      limit,
-      startDate,
-      endDate,
-    } = req.query;
+    const { eventType, categoryName, limit, startDate, endDate } =
+      request.query;
 
     const events = getAnalytics(
       eventType as string,
@@ -84,14 +80,11 @@ router.get('/events', async (req, res) => {
  * GET /api/analytics/summary
  * Get analytics summary by event type
  */
-router.get('/summary', async (req, res) => {
+router.get('/summary', async (request, res) => {
   try {
-    const { startDate, endDate } = req.query;
+    const { startDate, endDate } = request.query;
 
-    const summary = getAnalyticsSummary(
-      startDate as string,
-      endDate as string,
-    );
+    const summary = getAnalyticsSummary(startDate as string, endDate as string);
 
     res.json({
       success: true,
@@ -116,14 +109,9 @@ router.get('/summary', async (req, res) => {
  * POST /api/analytics/events
  * Track a new analytics event
  */
-router.post('/events', async (req, res) => {
+router.post('/events', async (request, res) => {
   try {
-    const {
-      eventType,
-      categoryName,
-      wallpaperId,
-      metadata,
-    } = req.body;
+    const { eventType, categoryName, wallpaperId, metadata } = request.body;
 
     if (!eventType) {
       return res.status(400).json({
@@ -133,12 +121,7 @@ router.post('/events', async (req, res) => {
       });
     }
 
-    const success = trackEvent(
-      eventType,
-      categoryName,
-      wallpaperId,
-      metadata,
-    );
+    const success = trackEvent(eventType, categoryName, wallpaperId, metadata);
 
     if (!success) {
       return res.status(500).json({
@@ -172,11 +155,15 @@ router.post('/events', async (req, res) => {
  * DELETE /api/analytics/cleanup
  * Clean up old analytics data
  */
-router.delete('/cleanup', async (req, res) => {
+router.delete('/cleanup', async (request, res) => {
   try {
-    const { olderThanDays } = req.body;
+    const { olderThanDays } = request.body;
 
-    if (!olderThanDays || typeof olderThanDays !== 'number' || olderThanDays < 1) {
+    if (
+      !olderThanDays ||
+      typeof olderThanDays !== 'number' ||
+      olderThanDays < 1
+    ) {
       return res.status(400).json({
         success: false,
         error: 'Invalid olderThanDays',
