@@ -6,11 +6,13 @@ import {
   SyncStatusIndicator,
 } from '@/components/loading';
 import { WallpaperGrid, WallpaperCard } from '@/components/wallpaper-grid';
+import { WallpaperModal } from '@/components/wallpaper-modal';
 import { useDownloads } from '@/hooks/use-downloads';
+import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import {
   useCategories,
   useFeaturedWallpapers,
-  useWallpapersByCategory,
+  useInfiniteCategoryWallpapers,
 } from '@/hooks/use-wallpapers';
 
 import type { WallpaperItem } from '@/types/wallpaper';
@@ -18,6 +20,9 @@ import type { WallpaperItem } from '@/types/wallpaper';
 export const GalleryPage: React.FC = () => {
   const downloads = useDownloads();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [previewWallpaper, setPreviewWallpaper] =
+    useState<WallpaperItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Fetch featured wallpapers immediately for better UX (reduced to avoid rate limits)
   const featuredQuery = useFeaturedWallpapers(3);
@@ -25,37 +30,77 @@ export const GalleryPage: React.FC = () => {
   // Fetch categories (lightweight)
   const categoriesQuery = useCategories();
 
-  // Fetch wallpapers from selected category (if any)
-  const categoryWallpapersQuery = useWallpapersByCategory(
+  // Fetch wallpapers from selected category with infinite scroll (if any)
+  const categoryWallpapersQuery = useInfiniteCategoryWallpapers(
     selectedCategory || '',
+    12, // Load 12 wallpapers per page to avoid rate limits
     !!selectedCategory,
   );
 
+  // Debug logging
+  console.log('Gallery Debug:', {
+    featuredQuery: {
+      data: featuredQuery.data,
+      isLoading: featuredQuery.isLoading,
+      error: featuredQuery.error,
+    },
+    categoriesQuery: {
+      data: categoriesQuery.data,
+      isLoading: categoriesQuery.isLoading,
+      error: categoriesQuery.error,
+    },
+  });
+
   // Determine what wallpapers to show
   const wallpapers = selectedCategory
-    ? categoryWallpapersQuery.data || []
+    ? categoryWallpapersQuery.data?.pages.flatMap((page) => page.wallpapers) ||
+      []
     : featuredQuery.data || [];
 
   const isInitialLoading = featuredQuery.isLoading && !featuredQuery.data;
   const isCategoryLoading =
-    categoryWallpapersQuery.isLoading && !!selectedCategory;
+    categoryWallpapersQuery.isLoading &&
+    !!selectedCategory &&
+    !categoryWallpapersQuery.data;
   const hasError =
     featuredQuery.error ||
     categoriesQuery.error ||
     categoryWallpapersQuery.error;
 
   const handleDownload = (wallpaper: WallpaperItem) => {
-    downloads.startDownload(wallpaper);
+    // Simple download trigger
+    if (wallpaper.download_url) {
+      window.open(wallpaper.download_url, '_blank');
+    }
   };
 
   const handlePreview = (wallpaper: WallpaperItem) => {
-    // TODO: Implement preview modal
-    console.log('Preview wallpaper:', wallpaper.name);
+    setPreviewWallpaper(wallpaper);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setPreviewWallpaper(null);
   };
 
   const handleCategorySelect = (categorySlug: string | null) => {
     setSelectedCategory(categorySlug);
   };
+
+  // Infinite scroll: load more wallpapers when scrolling to bottom
+  const loadMoreReference = useIntersectionObserver(
+    () => {
+      if (
+        selectedCategory &&
+        categoryWallpapersQuery.hasNextPage &&
+        !categoryWallpapersQuery.isFetchingNextPage
+      ) {
+        categoryWallpapersQuery.fetchNextPage();
+      }
+    },
+    { rootMargin: '200px' }, // Start loading 200px before reaching the bottom
+  );
 
   const getLoadingMessage = () => {
     if (isInitialLoading) return 'Loading featured wallpapers...';
@@ -179,21 +224,48 @@ export const GalleryPage: React.FC = () => {
         {!isInitialLoading && !isCategoryLoading && !hasError && (
           <>
             {wallpapers.length > 0 ? (
-              <WallpaperGrid layout="auto" spacing="md">
-                {wallpapers.map((wallpaper) => (
-                  <WallpaperCard
-                    key={wallpaper.id}
-                    wallpaper={wallpaper}
-                    downloadStatus={downloads.getDownloadStatus(wallpaper.id)}
-                    downloadProgress={downloads.downloadProgress(wallpaper.id)}
-                    onDownload={handleDownload}
-                    onPause={downloads.pauseDownload}
-                    onCancel={downloads.cancelDownload}
-                    onPreview={handlePreview}
-                    size="md"
-                  />
-                ))}
-              </WallpaperGrid>
+              <>
+                <WallpaperGrid layout="auto" spacing="md">
+                  {wallpapers.map((wallpaper) => (
+                    <WallpaperCard
+                      key={wallpaper.id}
+                      wallpaper={wallpaper}
+                      downloadStatus={downloads.getDownloadStatus(wallpaper.id)}
+                      downloadProgress={downloads.downloadProgress(
+                        wallpaper.id,
+                      )}
+                      onDownload={handleDownload}
+                      onPause={downloads.pauseDownload}
+                      onCancel={downloads.cancelDownload}
+                      onPreview={handlePreview}
+                      size="md"
+                    />
+                  ))}
+                </WallpaperGrid>
+
+                {/* Infinite Scroll Trigger & Status */}
+                {selectedCategory && wallpapers.length > 0 && (
+                  <div className="flex justify-center py-8">
+                    {categoryWallpapersQuery.hasNextPage ? (
+                      <div
+                        ref={loadMoreReference}
+                        className="flex items-center gap-2 text-muted-foreground"
+                      >
+                        {categoryWallpapersQuery.isFetchingNextPage && (
+                          <>
+                            <div className="w-4 h-4 border-2 border-neon/30 border-t-neon animate-spin rounded-full" />
+                            <span>Loading more wallpapers...</span>
+                          </>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-muted-foreground text-sm">
+                        You&apos;ve reached the end of this category
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
             ) : (
               <DataFetchStatus
                 isLoading={false}
@@ -209,6 +281,14 @@ export const GalleryPage: React.FC = () => {
           </>
         )}
       </main>
+
+      {/* Wallpaper Preview Modal */}
+      <WallpaperModal
+        wallpaper={previewWallpaper}
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onDownload={handleDownload}
+      />
     </div>
   );
 };

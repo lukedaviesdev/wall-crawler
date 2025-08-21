@@ -16,6 +16,45 @@ export default defineConfig({
     }),
     TanStackRouterVite(),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // Vendor chunks
+          if (id.includes('react') && !id.includes('react-query')) {
+            return 'react-vendor';
+          }
+          if (id.includes('@tanstack')) {
+            return 'tanstack';
+          }
+          if (
+            id.includes('lucide-react') ||
+            id.includes('clsx') ||
+            id.includes('tailwind-merge')
+          ) {
+            return 'ui-vendor';
+          }
+
+          // App chunks based on path
+          if (id.includes('src/lib/api/')) {
+            return 'api';
+          }
+          if (id.includes('src/lib/database/')) {
+            return 'database';
+          }
+          if (id.includes('src/lib/github-api/')) {
+            return 'github-api';
+          }
+          if (id.includes('src/components/ui/')) {
+            return 'ui-components';
+          }
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+    target: 'esnext',
+    minify: 'esbuild',
+  },
   css: {
     postcss: {
       plugins: [tailwindcss, autoprefixer],

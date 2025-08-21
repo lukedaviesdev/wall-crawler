@@ -44,10 +44,15 @@ export const getWallpapers = (
   const direction = filters.orderDirection || 'DESC';
   query += ` ORDER BY ${orderBy} ${direction}`;
 
-  // Add limit
+  // Add limit and offset
   if (filters.limit) {
     query += ' LIMIT ?';
     parameters.push(filters.limit);
+
+    if (filters.offset) {
+      query += ' OFFSET ?';
+      parameters.push(filters.offset);
+    }
   }
 
   const stmt = database.prepare(query);

@@ -1,8 +1,15 @@
 /**
- * Debug utilities for inspecting the localStorage database
+ * Debug utilities for inspecting the SQLite database
  */
 
 import { getDb as getDatabase } from './connection';
+
+import type {
+  DatabaseCategory,
+  DatabaseWallpaper,
+  DatabaseSyncMeta,
+  DatabaseAnalytics,
+} from '@/types/database';
 
 /**
  * Export current database state to console and download as JSON
@@ -10,16 +17,30 @@ import { getDb as getDatabase } from './connection';
 export const exportDatabaseState = (): void => {
   const database = getDatabase();
 
+  // Query all data from SQLite database
+  const categories = database
+    .prepare('SELECT * FROM categories')
+    .all() as DatabaseCategory[];
+  const wallpapers = database
+    .prepare('SELECT * FROM wallpapers')
+    .all() as DatabaseWallpaper[];
+  const syncMeta = database
+    .prepare('SELECT * FROM sync_meta')
+    .all() as DatabaseSyncMeta[];
+  const analytics = database
+    .prepare('SELECT * FROM analytics')
+    .all() as DatabaseAnalytics[];
+
   const state = {
-    categories: Array.from(database.categories.values()),
-    wallpapers: Array.from(database.wallpapers.values()),
-    syncMeta: Array.from(database.syncMeta.values()),
-    analytics: database.analytics,
+    categories,
+    wallpapers,
+    syncMeta,
+    analytics,
     summary: {
-      categoriesCount: database.categories.size,
-      wallpapersCount: database.wallpapers.size,
-      syncMetaCount: database.syncMeta.size,
-      analyticsCount: database.analytics.length,
+      categoriesCount: categories.length,
+      wallpapersCount: wallpapers.length,
+      syncMetaCount: syncMeta.length,
+      analyticsCount: analytics.length,
     },
   };
 
@@ -43,46 +64,76 @@ export const exportDatabaseState = (): void => {
  * Clear all database data (useful for testing)
  */
 export const clearDatabase = (): void => {
-  localStorage.removeItem('wallcrawler_categories');
-  localStorage.removeItem('wallcrawler_wallpapers');
-  localStorage.removeItem('wallcrawler_sync_meta');
-  localStorage.removeItem('wallcrawler_analytics');
+  const database = getDatabase();
 
-  console.log('🗑️ Database cleared. Refresh the page to start fresh.');
+  // Clear all tables in SQLite database
+  database.prepare('DELETE FROM analytics').run();
+  database.prepare('DELETE FROM wallpapers').run();
+  database.prepare('DELETE FROM sync_meta').run();
+  database.prepare('DELETE FROM categories').run();
+
+  console.log('🗑️ Database cleared. All tables emptied.');
 };
 
 /**
  * Get quick database summary
  */
-export const getDatabaseSummary = (): void => {
+export const getDatabaseSummary = () => {
   const database = getDatabase();
 
+  // Get counts from SQLite database
+  const categoriesCount = database
+    .prepare('SELECT COUNT(*) as count FROM categories')
+    .get() as { count: number };
+  const wallpapersCount = database
+    .prepare('SELECT COUNT(*) as count FROM wallpapers')
+    .get() as { count: number };
+  const syncMetaCount = database
+    .prepare('SELECT COUNT(*) as count FROM sync_meta')
+    .get() as { count: number };
+  const analyticsCount = database
+    .prepare('SELECT COUNT(*) as count FROM analytics')
+    .get() as { count: number };
+
   const summary = {
-    categories: database.categories.size,
-    wallpapers: database.wallpapers.size,
-    syncMeta: database.syncMeta.size,
-    analytics: database.analytics.length,
+    categories: categoriesCount.count,
+    wallpapers: wallpapersCount.count,
+    syncMeta: syncMetaCount.count,
+    analytics: analyticsCount.count,
   };
 
   console.log('📊 Database Summary:', summary);
 
-  if (database.categories.size > 0) {
-    console.log('📁 Categories:', Array.from(database.categories.keys()));
+  if (summary.categories > 0) {
+    const categories = database
+      .prepare('SELECT slug FROM categories')
+      .all() as { slug: string }[];
+    console.log(
+      '📁 Categories:',
+      categories.map((c) => c.slug),
+    );
   }
 
-  if (database.wallpapers.size > 0) {
-    const wallpapersByCategory = Array.from(
-      database.wallpapers.values(),
-    ).reduce(
-      (accumulator, wallpaper) => {
-        accumulator[wallpaper.category_name] =
-          (accumulator[wallpaper.category_name] || 0) + 1;
+  if (summary.wallpapers > 0) {
+    const wallpapersByCategory = database
+      .prepare(
+        `
+      SELECT category_name, COUNT(*) as count 
+      FROM wallpapers 
+      GROUP BY category_name
+    `,
+      )
+      .all() as { category_name: string; count: number }[];
+
+    const categoryMap = wallpapersByCategory.reduce(
+      (accumulator, row) => {
+        accumulator[row.category_name] = row.count;
         return accumulator;
       },
       {} as Record<string, number>,
     );
 
-    console.log('🖼️ Wallpapers by category:', wallpapersByCategory);
+    console.log('🖼️ Wallpapers by category:', categoryMap);
   }
 
   return summary;

@@ -1,13 +1,17 @@
 import express from 'express';
-import { syncCategories, getSyncStatus as getSyncOperationStatus } from '@/lib/database/sync';
+
 import {
+  importFromJson,
+  importFromFile,
+  clearDatabase,
   updateSyncMeta,
   getSyncMeta,
   getAllSyncMeta,
   getSyncStatus,
-  getStats
-} from '@/lib/database/metadata';
-import { importFromJson, importFromFile, clearDatabase } from '@/lib/database/import';
+  getStats,
+  syncCategories,
+  getSyncStatus as getSyncOperationStatus,
+} from '@/lib/database';
 
 const router = express.Router();
 
@@ -15,7 +19,7 @@ const router = express.Router();
  * GET /api/sync/status
  * Get overall sync status
  */
-router.get('/status', async (_req, res) => {
+router.get('/status', async (_request, res) => {
   try {
     const operationStatus = getSyncOperationStatus();
     const syncStatuses = getSyncStatus();
@@ -43,7 +47,7 @@ router.get('/status', async (_req, res) => {
  * POST /api/sync/categories
  * Sync categories from GitHub
  */
-router.post('/categories', async (_req, res) => {
+router.post('/categories', async (_request, res) => {
   try {
     console.log('🔄 Starting category sync via API...');
     const result = await syncCategories();
@@ -67,7 +71,7 @@ router.post('/categories', async (_req, res) => {
  * GET /api/sync/meta
  * Get all sync metadata
  */
-router.get('/meta', async (_req, res) => {
+router.get('/meta', async (_request, res) => {
   try {
     const syncMeta = getAllSyncMeta();
 
@@ -90,9 +94,9 @@ router.get('/meta', async (_req, res) => {
  * GET /api/sync/meta/:categoryName
  * Get sync metadata for specific category
  */
-router.get('/meta/:categoryName', async (req, res) => {
+router.get('/meta/:categoryName', async (request, res) => {
   try {
-    const { categoryName } = req.params;
+    const { categoryName } = request.params;
     const syncMeta = getSyncMeta(categoryName);
 
     if (!syncMeta) {
@@ -121,10 +125,10 @@ router.get('/meta/:categoryName', async (req, res) => {
  * PUT /api/sync/meta/:categoryName
  * Update sync metadata for category
  */
-router.put('/meta/:categoryName', async (req, res) => {
+router.put('/meta/:categoryName', async (request, res) => {
   try {
-    const { categoryName } = req.params;
-    const { status, count, error } = req.body;
+    const { categoryName } = request.params;
+    const { status, count, error } = request.body;
 
     if (!status) {
       return res.status(400).json({
@@ -174,9 +178,9 @@ router.put('/meta/:categoryName', async (req, res) => {
  * POST /api/sync/import/json
  * Import data from JSON payload
  */
-router.post('/import/json', async (req, res) => {
+router.post('/import/json', async (request, res) => {
   try {
-    const data = req.body;
+    const data = request.body;
 
     if (!data || typeof data !== 'object') {
       return res.status(400).json({
@@ -222,9 +226,9 @@ router.post('/import/json', async (req, res) => {
  * POST /api/sync/import/file
  * Import data from file path
  */
-router.post('/import/file', async (req, res) => {
+router.post('/import/file', async (request, res) => {
   try {
-    const { filePath } = req.body;
+    const { filePath } = request.body;
 
     if (!filePath || typeof filePath !== 'string') {
       return res.status(400).json({
@@ -270,9 +274,9 @@ router.post('/import/file', async (req, res) => {
  * DELETE /api/sync/clear
  * Clear all database data
  */
-router.delete('/clear', async (req, res) => {
+router.delete('/clear', async (request, res) => {
   try {
-    const { confirm } = req.body;
+    const { confirm } = request.body;
 
     if (confirm !== 'CLEAR_ALL_DATA') {
       return res.status(400).json({
