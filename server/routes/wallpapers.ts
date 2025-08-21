@@ -10,8 +10,42 @@ import {
   incrementDownloadCount,
   incrementViewCount,
 } from '@/lib/database/wallpapers';
+import { getCategoryById, getCategoryBySlug } from '@/lib/database/categories';
+import {
+  getWallpapersByCategoryLimited as fetchWallpapersFromGitHub,
+  getFeaturedWallpapers as fetchFeaturedFromGitHub
+} from '@/lib/github-api';
 
 const router = express.Router();
+
+/**
+ * Helper function to convert WallpaperItem to DatabaseWallpaper format
+ */
+const convertWallpaperItemToDatabase = (
+  wallpaper: any, // GitHub API wallpaper
+  categoryId: number,
+  categoryName: string,
+  isFeatured: boolean = false
+) => ({
+  id: 0, // Will be auto-generated
+  github_id: wallpaper.sha,
+  name: wallpaper.name,
+  path: wallpaper.path,
+  category_id: categoryId,
+  category_name: categoryName,
+  download_url: wallpaper.download_url,
+  html_url: wallpaper.html_url,
+  size: wallpaper.size,
+  width: wallpaper.resolution?.width || null,
+  height: wallpaper.resolution?.height || null,
+  aspect_ratio: wallpaper.aspectRatio || null,
+  dominant_color: wallpaper.dominantColor || null,
+  is_featured: isFeatured,
+  download_count: 0,
+  view_count: 0,
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+});
 
 /**
  * GET /api/wallpapers
@@ -61,12 +95,50 @@ router.get('/', async (req, res) => {
 
 /**
  * GET /api/wallpapers/featured
- * Get featured wallpapers
+ * Get featured wallpapers (with GitHub API fallback)
  */
 router.get('/featured', async (req, res) => {
   try {
-    const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined;
-    const wallpapers = getFeaturedWallpapers(limit);
+    const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 18;
+
+    // First try to get from database
+    let wallpapers = getFeaturedWallpapers(limit);
+
+        // If database is empty or has very few wallpapers, fetch from GitHub API
+    if (wallpapers.length < Math.min(limit, 6)) {
+      console.log(`🔄 Database has only ${wallpapers.length} featured wallpapers, fetching from GitHub API...`);
+
+      try {
+        // Use conservative limit to avoid rate limits (featured pulls from multiple categories)
+        const conservativeLimit = Math.min(limit, 9); // Max 9 to stay under rate limits
+        const githubWallpapers = await fetchFeaturedFromGitHub(conservativeLimit);
+
+        if (githubWallpapers.length > 0) {
+          console.log(`📥 Fetched ${githubWallpapers.length} wallpapers from GitHub, caching to database...`);
+
+          // Cache the wallpapers in database (resolve category IDs)
+          const wallpaperData = githubWallpapers.map(wallpaper => {
+            const category = getCategoryBySlug(wallpaper.category);
+            return convertWallpaperItemToDatabase(
+              wallpaper,
+              category?.id || 0,
+              wallpaper.category,
+              true // is_featured
+            );
+          }).filter(w => w.category_id > 0); // Only cache wallpapers with valid categories
+
+          if (wallpaperData.length > 0) {
+            createMultipleWallpapers(wallpaperData);
+          }
+
+          // Convert GitHub data to database format for consistent response
+          wallpapers = wallpaperData;
+        }
+      } catch (githubError) {
+        console.warn('Failed to fetch from GitHub API:', githubError);
+        // Continue with database results even if GitHub fails
+      }
+    }
 
     res.json({
       success: true,
@@ -85,7 +157,13 @@ router.get('/featured', async (req, res) => {
 
 /**
  * GET /api/wallpapers/category/:categoryId
- * Get wallpapers by category ID
+ * Get wallpapers by category ID (with GitHub API fallback)
+ *
+ * NOTE: Currently implements lazy loading by limiting initial GitHub API fetches.
+ * For full pagination, frontend should implement:
+ * 1. Initial load from this endpoint (gets first 12-24 wallpapers)
+ * 2. Subsequent loads can request more from GitHub API in batches
+ * 3. Database serves as cache for already-fetched wallpapers
  */
 router.get('/category/:categoryId', async (req, res) => {
   try {
@@ -100,13 +178,58 @@ router.get('/category/:categoryId', async (req, res) => {
       });
     }
 
-    const wallpapers = getWallpapersByCategory(categoryId, limit);
+    // Get category info
+    const category = getCategoryById(categoryId);
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        error: 'Category not found',
+        message: `Category with ID ${categoryId} does not exist`,
+      });
+    }
+
+    // First try to get from database
+    let wallpapers = getWallpapersByCategory(categoryId, limit);
+
+    // If database is empty for this category, fetch from GitHub API
+    if (wallpapers.length === 0) {
+      console.log(`🔄 No wallpapers found in database for category '${category.slug}', fetching from GitHub API...`);
+
+      try {
+        // Use a reasonable limit for initial load to avoid rate limits
+        const initialLimit = limit || 12; // Default to 12 wallpapers for initial load
+        const githubWallpapers = await fetchWallpapersFromGitHub(category.slug, initialLimit);
+
+        if (githubWallpapers.length > 0) {
+          console.log(`📥 Fetched ${githubWallpapers.length} wallpapers from GitHub for category '${category.slug}', caching to database...`);
+
+          // Cache the wallpapers in database
+          const wallpaperData = githubWallpapers.map(wallpaper =>
+            convertWallpaperItemToDatabase(
+              wallpaper,
+              categoryId,
+              category.name,
+              false // is_featured
+            )
+          );
+
+          createMultipleWallpapers(wallpaperData);
+
+          // Convert GitHub data to database format for consistent response
+          wallpapers = wallpaperData;
+        }
+      } catch (githubError) {
+        console.warn(`Failed to fetch category '${category.slug}' from GitHub API:`, githubError);
+        // Continue with empty database results
+      }
+    }
 
     res.json({
       success: true,
       data: wallpapers,
       count: wallpapers.length,
       categoryId,
+      categoryName: category.name,
     });
   } catch (error) {
     console.error('Error fetching wallpapers by category:', error);
